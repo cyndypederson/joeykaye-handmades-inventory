@@ -4,8 +4,8 @@
   "description": "Handmade crafts inventory and project management system",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#2C5F7C",
-  "theme_color": "#2C5F7C",
+  "background_color": "#228B22",
+  "theme_color": "#228B22",
   "orientation": "portrait-primary",
   "icons": [
     {
