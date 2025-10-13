@@ -356,16 +356,16 @@ main {
 }
 
 .btn-info {
-    background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+    background: linear-gradient(135deg, #6B8E6B 0%, #4A7C59 100%);
     color: white;
-    border: 2px solid #17a2b8;
+    border: 2px solid #6B8E6B;
 }
 
 .btn-info:hover {
-    background: linear-gradient(135deg, #138496 0%, #0f6674 100%);
-    border-color: #138496;
+    background: linear-gradient(135deg, #4A7C59 0%, #3A6B4A 100%);
+    border-color: #4A7C59;
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(23, 162, 184, 0.3);
+    box-shadow: 0 4px 12px rgba(74, 124, 89, 0.3);
 }
 
 .btn-success {
@@ -881,9 +881,9 @@ tr:nth-child(even) {
 /* Status icon removed */
 
 .status-in-progress {
-    background: linear-gradient(135deg, #F7F9F7 0%, #BBDEFB 100%);
-    color: #1565C0;
-    border: 2px solid #2196F3;
+    background: linear-gradient(135deg, #F7F9F7 0%, #E8F5E8 100%);
+    color: #4A7C59;
+    border: 2px solid #6B8E6B;
 }
 
 /* Status icon removed */
@@ -2514,7 +2514,7 @@ tr:nth-child(even) {
     color: white;
 }
 
-.status-new { background: #17a2b8; }
+.status-new { background: #6B8E6B; }
 .status-in-progress { background: #ffc107; color: #212529; }
 .status-completed { background: #A8C8A8; }
 .status-archived { background: #6c757d; }
@@ -2566,7 +2566,7 @@ tr:nth-child(even) {
     font-weight: 500;
 }
 
-.priority-low { background: #E6F3FF; color: #1565C0; }
+.priority-low { background: #F0F8F0; color: #4A7C59; }
 .priority-medium { background: #fff3cd; color: #856404; }
 .priority-high { background: #f8d7da; color: #721c24; }
 
@@ -2862,8 +2862,8 @@ tr:nth-child(even) {
 
 .status-paid {
     background-color: #d4edda;
-    color: #1565C0;
-    border: 1px solid #BBDEFB;
+    color: #4A7C59;
+    border: 1px solid #E8F5E8;
 }
 
 .status-overdue {
@@ -2875,8 +2875,8 @@ tr:nth-child(even) {
 /* New status options for inventory */
 .status-available {
     background-color: #d4edda;
-    color: #1565C0;
-    border: 1px solid #BBDEFB;
+    color: #4A7C59;
+    border: 1px solid #E8F5E8;
 }
 
 .status-low-stock {
@@ -3313,12 +3313,12 @@ tr:nth-child(even) {
 
 .inventory-row.status-in-progress {
     background-color: #d1ecf1;
-    border-left: 4px solid #17a2b8;
+    border-left: 4px solid #6B8E6B;
 }
 
 .inventory-row.status-work-in-progress {
     background-color: #d1ecf1;
-    border-left: 4px solid #17a2b8;
+    border-left: 4px solid #6B8E6B;
 }
 
 .inventory-row.status-completed {
@@ -4897,9 +4897,9 @@ body {
     
     .form-actions .btn-info {
         order: 3;
-        background: #17a2b8;
+        background: #6B8E6B;
         color: white;
-        border: 2px solid #17a2b8;
+        border: 2px solid #6B8E6B;
     }
     
 /* Search input fix */
@@ -5989,7 +5989,7 @@ body {
 }
 
 .toast.info {
-    border-left: 4px solid #17a2b8;
+    border-left: 4px solid #6B8E6B;
 }
 
 @keyframes slideIn {
@@ -6396,7 +6396,7 @@ body {
     }
     
     .mobile-notification-info {
-        border-left: 4px solid #17a2b8;
+        border-left: 4px solid #6B8E6B;
     }
     
     .mobile-notification-content {
@@ -6419,7 +6419,7 @@ body {
     }
     
     .mobile-notification-info .mobile-notification-content i {
-        color: #17a2b8;
+        color: #6B8E6B;
     }
     
     @keyframes slideInDown {
