@@ -1,0 +1,46 @@
+{
+  "name": "embroidery-inventory-manager",
+  "version": "1.0.27",
+  "description": "A web-based inventory management system for embroidery businesses",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "deploy": "./deploy.sh",
+    "version:bump": "node version-manager.js",
+    "pm2:start": "pm2 start ecosystem.config.js",
+    "pm2:stop": "pm2 stop embroidery-inventory",
+    "pm2:restart": "pm2 restart embroidery-inventory",
+    "pm2:delete": "pm2 delete embroidery-inventory",
+    "pm2:status": "pm2 status",
+    "pm2:logs": "pm2 logs embroidery-inventory",
+    "test": "node test-smoke.js",
+    "test:smoke": "node test-smoke.js",
+    "test:modals": "node test-modal-separation.js",
+    "test:comprehensive": "node test-comprehensive.js",
+    "test:all": "npm run test:smoke && npm run test:modals && npm run test:comprehensive",
+    "test:watch": "nodemon test-smoke.js",
+    "pre-deploy": "node pre-deploy.js",
+    "deploy:safe": "npm run pre-deploy && npm run deploy"
+  },
+  "keywords": [
+    "embroidery",
+    "inventory",
+    "management",
+    "local"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.2",
+    "express": "^4.18.2",
+    "mongodb": "^6.19.0",
+    "tesseract.js": "^6.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1",
+    "pm2": "^6.0.11",
+    "puppeteer": "^24.22.3"
+  }
+}

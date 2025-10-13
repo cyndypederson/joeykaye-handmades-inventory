@@ -1,0 +1,2376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate, max-age=0, private, no-transform">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <!-- Nuclear mobile cache fix - force reload -->
+    <script>
+        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+            if (window.location.search.indexOf('reloaded=true') === -1) {
+                console.log('💥 MOBILE NUCLEAR: Forcing immediate reload');
+                window.location.href = window.location.href + (window.location.search ? '&' : '?') + 'reloaded=true&t=' + Date.now();
+            }
+        }
+    </script>
+    <meta name="version" content="1.0.0">
+    <title>Joey Kaye Handmades Inventory - v1.0.0</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="application-name" content="Joey Kaye Handmades">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Joey Kaye">
+    <meta name="description" content="Handmade crafts inventory and project management system">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="msapplication-TileColor" content="#2C5F7C">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name="theme-color" content="#2C5F7C">
+    
+    <!-- PWA Manifest -->
+    <!-- Manifest temporarily disabled to fix Vercel deployment -->
+    <!-- <link rel="manifest" href="manifest.json"> -->
+    
+    <!-- Apple Touch Icons -->
+    <link rel="apple-touch-icon" href="logo.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="logo.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="logo.png">
+    <link rel="apple-touch-icon" sizes="167x167" href="logo.png">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="logo.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="logo.png">
+    
+    <link rel="stylesheet" href="styles.css?v=1.0.0" id="css-cache-bust">
+    <script>
+        // Force cache clear and reload CSS
+        (function() {
+            const timestamp = Date.now();
+            const cssLink = document.getElementById('css-cache-bust');
+            if (cssLink) {
+                cssLink.href = cssLink.href.replace(/[?&]t=\d+/, '') + '&t=' + timestamp + '&force=' + timestamp;
+            }
+            
+            // Force reload if version is old or cached
+            if (window.location.search.indexOf('v=1.0.12') !== -1 || 
+                window.location.search.indexOf('v=1.0.13') !== -1 ||
+                window.location.search.indexOf('v=1.0.80') !== -1 ||
+                window.location.search.indexOf('v=1.0.8') !== -1) {
+                console.log('🔄 Cache bust - forcing reload for version update');
+                window.location.reload(true);
+            }
+        })();
+    </script>
+    <style>
+        /* Mobile-first modal design - inline CSS to override any caching issues */
+        
+        /* Force single column layout on mobile devices */
+        @media (max-width: 768px) {
+            .modal-form,
+            #editItemForm,
+            #addItemForm,
+            #addIdeaForm,
+            #addPhotoForm,
+            #addCustomerForm,
+            #editCustomerForm,
+            #addSaleForm,
+            #editSaleForm {
+                display: grid !important;
+                grid-template-columns: 1fr !important;
+                gap: 1rem !important;
+            }
+            
+            .modal-form .form-group,
+            #editItemForm .form-group,
+            #addItemForm .form-group,
+            #addIdeaForm .form-group,
+            #addPhotoForm .form-group,
+            #addCustomerForm .form-group,
+            #editCustomerForm .form-group,
+            #addSaleForm .form-group,
+            #editSaleForm .form-group {
+                display: block !important;
+                width: 100% !important;
+                grid-column: 1 / -1 !important;
+                margin-bottom: 1rem !important;
+            }
+            
+            .modal-form .form-group.half-width,
+            #editItemForm .form-group.half-width,
+            #addItemForm .form-group.half-width,
+            #addIdeaForm .form-group.half-width,
+            #addPhotoForm .form-group.half-width,
+            #addCustomerForm .form-group.half-width,
+            #editCustomerForm .form-group.half-width,
+            #addSaleForm .form-group.half-width,
+            #editSaleForm .form-group.half-width {
+                grid-column: 1 / -1 !important;
+                width: 100% !important;
+            }
+        }
+        .modal-content {
+            max-width: 95vw;
+            width: 95vw;
+            margin: 2% auto;
+            padding: 1rem;
+            max-height: 96vh;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .modal-form,
+        #editItemForm,
+        #addItemForm,
+        #addIdeaForm,
+        #addPhotoForm,
+        #addCustomerForm,
+        #editCustomerForm,
+        #addSaleForm,
+        #editSaleForm {
+            display: grid !important;
+            grid-template-columns: 1fr !important;
+            gap: 1rem !important;
+            margin-top: 1rem !important;
+            width: 100% !important;
+        }
+        
+        .modal-form .form-group,
+        #editItemForm .form-group,
+        #addItemForm .form-group,
+        #addIdeaForm .form-group,
+        #addPhotoForm .form-group,
+        #addCustomerForm .form-group,
+        #editCustomerForm .form-group,
+        #addSaleForm .form-group,
+        #editSaleForm .form-group {
+            display: block !important;
+            width: 100% !important;
+            margin-bottom: 1rem !important;
+            grid-column: 1 / -1 !important;
+        }
+        
+        .modal-form .form-group input,
+        .modal-form .form-group select,
+        .modal-form .form-group textarea,
+        #editItemForm .form-group input,
+        #editItemForm .form-group select,
+        #editItemForm .form-group textarea,
+        #addItemForm .form-group input,
+        #addItemForm .form-group select,
+        #addItemForm .form-group textarea,
+        #addIdeaForm .form-group input,
+        #addIdeaForm .form-group select,
+        #addIdeaForm .form-group textarea,
+        #addPhotoForm .form-group input,
+        #addPhotoForm .form-group select,
+        #addPhotoForm .form-group textarea,
+        #addCustomerForm .form-group input,
+        #addCustomerForm .form-group select,
+        #addCustomerForm .form-group textarea,
+        #editCustomerForm .form-group input,
+        #editCustomerForm .form-group select,
+        #editCustomerForm .form-group textarea,
+        #addSaleForm .form-group input,
+        #addSaleForm .form-group select,
+        #addSaleForm .form-group textarea,
+        #editSaleForm .form-group input,
+        #editSaleForm .form-group select,
+        #editSaleForm .form-group textarea {
+            width: 100% !important;
+            box-sizing: border-box !important;
+            font-size: 16px !important; /* Prevents zoom on iOS */
+            padding: 0.75rem !important;
+            border-radius: 8px !important;
+        }
+        
+        .modal-form .form-actions,
+        #editItemForm .form-actions,
+        #addItemForm .form-actions,
+        #addIdeaForm .form-actions,
+        #addPhotoForm .form-actions,
+        #addCustomerForm .form-actions,
+        #editCustomerForm .form-actions,
+        #addSaleForm .form-actions,
+        #editSaleForm .form-actions {
+            grid-column: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+        }
+        
+        .modal-form .form-actions .btn,
+        #editItemForm .form-actions .btn,
+        #addItemForm .form-actions .btn,
+        #addIdeaForm .form-actions .btn,
+        #addPhotoForm .form-actions .btn,
+        #addCustomerForm .form-actions .btn,
+        #editCustomerForm .form-actions .btn,
+        #addSaleForm .form-actions .btn,
+        #editSaleForm .form-actions .btn {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            font-size: 1rem;
+        }
+        
+        /* Desktop styles - only apply on larger screens */
+        @media (min-width: 769px) {
+            .modal-content {
+                max-width: 900px;
+                min-width: 650px;
+                width: 90%;
+                padding: 2rem;
+            }
+            
+            .modal-form,
+            #editItemForm,
+            #addItemForm,
+            #addIdeaForm,
+            #addPhotoForm,
+            #addCustomerForm,
+            #editCustomerForm,
+            #addSaleForm,
+            #editSaleForm {
+                grid-template-columns: 1fr 1fr;
+                gap: 1.75rem;
+            }
+            
+            .modal-form .form-group.full-width,
+            #editItemForm .form-group.full-width,
+            #addItemForm .form-group.full-width,
+            #addIdeaForm .form-group.full-width,
+            #addPhotoForm .form-group.full-width,
+            #addCustomerForm .form-group.full-width,
+            #editCustomerForm .form-group.full-width,
+            #addSaleForm .form-group.full-width,
+            #editSaleForm .form-group.full-width {
+                grid-column: 1 / -1;
+            }
+            
+            .modal-form .form-group.half-width,
+            #editItemForm .form-group.half-width,
+            #addItemForm .form-group.half-width,
+            #addIdeaForm .form-group.half-width,
+            #addPhotoForm .form-group.half-width,
+            #addCustomerForm .form-group.half-width,
+            #editCustomerForm .form-group.half-width,
+            #addSaleForm .form-group.half-width,
+            #editSaleForm .form-group.half-width {
+                grid-column: span 1;
+            }
+            
+            .modal-form .form-actions,
+            #editItemForm .form-actions,
+            #addItemForm .form-actions,
+            #addIdeaForm .form-actions,
+            #addPhotoForm .form-actions,
+            #addCustomerForm .form-actions,
+            #editCustomerForm .form-actions,
+            #addSaleForm .form-actions,
+            #editSaleForm .form-actions {
+                grid-column: 1 / -1;
+                flex-direction: row;
+                justify-content: flex-end;
+                gap: 1rem;
+            }
+            
+            .modal-form .form-actions .btn,
+            #editItemForm .form-actions .btn,
+            #addItemForm .form-actions .btn,
+            #addIdeaForm .form-actions .btn,
+            #addPhotoForm .form-actions .btn,
+            #addCustomerForm .form-actions .btn,
+            #editCustomerForm .form-actions .btn,
+            #addSaleForm .form-actions .btn,
+            #editSaleForm .form-actions .btn {
+                width: auto;
+                padding: 0.875rem 1.5rem;
+            }
+        }
+    </style>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- OCR Library -->
+    <script src="https://unpkg.com/tesseract.js@4.1.1/dist/tesseract.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="top-bar">
+                <div class="branding">
+                    <h1>CyndyP StitchCraft Inventory Management</h1>
+                </div>
+                <div class="header-right">
+                    <div class="auth-status" id="authStatusContainer" style="display: none;">
+                        <span id="authStatus" class="status-indicator">
+                            <i class="fas fa-user"></i> <span id="authUsername"></span>
+                        </span>
+                        <button class="btn btn-sm btn-secondary" id="logoutBtn" style="margin-left: 0.5rem; padding: 0.25rem 0.75rem;" onclick="logout()">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </button>
+                    </div>
+                    <div class="version-display" id="versionDisplay">
+                        <i class="fas fa-tag"></i> v1.0.97
+                    </div>
+                    <div class="connection-status" id="connectionStatusContainer">
+                        <span id="connectionStatus" class="status-indicator">
+                            <i class="fas fa-circle"></i> Connecting...
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <nav>
+                <button class="nav-btn active" data-tab="projects">
+                    <i class="fas fa-project-diagram"></i> Projects
+                </button>
+                <button class="nav-btn" data-tab="inventory">
+                    <i class="fas fa-boxes"></i> Inventory
+                </button>
+                <button class="nav-btn" data-tab="customers">
+                    <i class="fas fa-users"></i> Customers
+                </button>
+                <button class="nav-btn" data-tab="wip">
+                    <i class="fas fa-tools"></i> Work In Progress
+                </button>
+                <button class="nav-btn" data-tab="completed">
+                    <i class="fas fa-check-circle"></i> Completed Items
+                </button>
+                <button class="nav-btn" data-tab="ideas">
+                    <i class="fas fa-lightbulb"></i> Ideas
+                </button>
+                <button class="nav-btn" data-tab="gallery">
+                    <i class="fas fa-images"></i> Gallery
+                </button>
+                <button class="nav-btn" data-tab="sales">
+                    <i class="fas fa-chart-line"></i> Sales
+                </button>
+                <button class="nav-btn" data-tab="reports">
+                    <i class="fas fa-file-alt"></i> Reports
+                </button>
+                <button class="nav-btn" data-tab="data">
+                    <i class="fas fa-database"></i> Data Management
+                </button>
+            </nav>
+        </header>
+
+        <main>
+            <!-- Projects Tab -->
+            <div id="projects" class="tab-content active">
+                <div class="section-header">
+                    <h2>Projects</h2>
+                </div>
+                <div class="filters">
+                    <input type="text" id="searchItems" placeholder="Search projects..." onkeyup="debouncedFilterItems()">
+                    <select id="statusFilter" onchange="filterItems()" aria-label="Filter by status">
+                        <option value="">All Status</option>
+                        <option value="pending">Pending</option>
+                        <option value="in-progress">In Progress</option>
+                        <option value="work-in-progress">Work in Progress</option>
+                        <option value="completed">Completed</option>
+                        <option value="sold">Sold</option>
+                    </select>
+                    <select id="customerFilter" onchange="filterItems()" aria-label="Filter by customer">
+                        <option value="">All Customers</option>
+                    </select>
+                    <select id="locationFilter" onchange="filterItems()" aria-label="Filter by location">
+                        <option value="">All Locations</option>
+                    </select>
+                    <select id="priorityFilter" onchange="filterItems()" aria-label="Filter by priority">
+                        <option value="">All Priority</option>
+                        <option value="high">High Priority</option>
+                        <option value="medium">Medium Priority</option>
+                        <option value="low">Low Priority</option>
+                    </select>
+                    <select id="dateRangeFilter" onchange="filterItems()" aria-label="Filter by date range">
+                        <option value="">All Dates</option>
+                        <option value="today">Today</option>
+                        <option value="week">This Week</option>
+                        <option value="month">This Month</option>
+                        <option value="quarter">This Quarter</option>
+                        <option value="year">This Year</option>
+                    </select>
+                    <button class="btn btn-primary" onclick="openAddProjectModal()">
+                        <i class="fas fa-plus"></i> Add New Project
+                    </button>
+                </div>
+
+                <!-- Projects Cards Grid -->
+                <div class="projects-cards-container">
+                    <div class="projects-cards-grid" id="projectsCards">
+                        <!-- Project cards will be populated here -->
+                    </div>
+                </div>
+                
+                <!-- Pagination Controls -->
+                <div class="pagination-container" id="projectsPagination">
+                    <div class="pagination-info">
+                        <span id="projectsPaginationInfo">Showing 1-50 of 0 items</span>
+                        <select id="projectsPageSize" onchange="changePageSize('projects', this.value)" aria-label="Items per page">
+                            <option value="25">25 per page</option>
+                            <option value="50" selected>50 per page</option>
+                            <option value="100">100 per page</option>
+                            <option value="200">200 per page</option>
+                        </select>
+                    </div>
+                    <div class="pagination-controls">
+                        <button class="btn btn-outline" id="projectsFirstPage" onclick="goToPage('projects', 1)" disabled>
+                            <i class="fas fa-angle-double-left"></i>
+                        </button>
+                        <button class="btn btn-outline" id="projectsPrevPage" onclick="goToPage('projects', currentPage - 1)" disabled>
+                            <i class="fas fa-angle-left"></i>
+                        </button>
+                        <span class="pagination-numbers" id="projectsPageNumbers"></span>
+                        <button class="btn btn-outline" id="projectsNextPage" onclick="goToPage('projects', currentPage + 1)" disabled>
+                            <i class="fas fa-angle-right"></i>
+                        </button>
+                        <button class="btn btn-outline" id="projectsLastPage" onclick="goToPage('projects', totalPages)" disabled>
+                            <i class="fas fa-angle-double-right"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Mobile Cards Container (hidden on desktop) -->
+                <div class="mobile-cards-container">
+                    <div class="mobile-cards-grid" id="mobileInventoryCards">
+                        <!-- Mobile cards will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Inventory Tab -->
+            <div id="inventory" class="tab-content">
+                <div class="section-header">
+                    <h2>Inventory</h2>
+                </div>
+                <div class="filters">
+                    <input type="text" id="inventorySearch" placeholder="Search inventory..." onkeyup="filterInventory()">
+                    <select id="inventoryStatusFilter" onchange="filterInventory()" aria-label="Filter inventory by status">
+                        <option value="">All Status</option>
+                        <option value="available">Available</option>
+                        <option value="low-stock">Low Stock</option>
+                        <option value="out-of-stock">Out of Stock</option>
+                    </select>
+                    <select id="inventoryCategoryFilter" onchange="filterInventory()" aria-label="Filter inventory by category">
+                        <option value="">All Categories</option>
+                        <option value="kits">Kits</option>
+                        <option value="hoops">Hoops</option>
+                        <option value="fabric">Fabric</option>
+                        <option value="thread">Thread</option>
+                        <option value="supplies">Other Supplies</option>
+                    </select>
+                    <select id="inventoryLocationFilter" onchange="filterInventory()" aria-label="Filter inventory by location">
+                        <option value="">All Locations</option>
+                    </select>
+                    <button class="btn btn-primary" onclick="openAddInventoryModal()">
+                        <i class="fas fa-plus"></i> Add New Inventory
+                    </button>
+                </div>
+
+                <!-- Inventory Cards Grid -->
+                <div class="inventory-cards-container">
+                    <div class="inventory-cards-grid" id="inventoryCards">
+                        <!-- Inventory cards will be populated here -->
+                    </div>
+                </div>
+                
+                <!-- Pagination Controls -->
+                <div class="pagination-container" id="inventoryPagination">
+                    <div class="pagination-info">
+                        <span id="inventoryPaginationInfo">Showing 1-50 of 0 items</span>
+                        <select id="inventoryPageSize" onchange="changePageSize('inventory', this.value)" aria-label="Inventory items per page">
+                            <option value="25">25 per page</option>
+                            <option value="50" selected>50 per page</option>
+                            <option value="100">100 per page</option>
+                            <option value="200">200 per page</option>
+                        </select>
+                    </div>
+                    <div class="pagination-controls">
+                        <button class="btn btn-outline" id="inventoryFirstPage" onclick="goToPage('inventory', 1)" disabled>
+                            <i class="fas fa-angle-double-left"></i>
+                        </button>
+                        <button class="btn btn-outline" id="inventoryPrevPage" onclick="goToPage('inventory', currentPage - 1)" disabled>
+                            <i class="fas fa-angle-left"></i>
+                        </button>
+                        <span class="pagination-numbers" id="inventoryPageNumbers"></span>
+                        <button class="btn btn-outline" id="inventoryNextPage" onclick="goToPage('inventory', currentPage + 1)" disabled>
+                            <i class="fas fa-angle-right"></i>
+                        </button>
+                        <button class="btn btn-outline" id="inventoryLastPage" onclick="goToPage('inventory', totalPages)" disabled>
+                            <i class="fas fa-angle-double-right"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Mobile Cards Container for Inventory Items -->
+                <div class="mobile-cards-container">
+                    <div class="mobile-cards-grid" id="mobileInventoryItemsCards">
+                        <!-- Mobile cards will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Customers Tab -->
+            <div id="customers" class="tab-content">
+                <div class="section-header">
+                    <h2>Customer Management</h2>
+                    <div class="customer-actions">
+                        <button class="btn btn-primary" onclick="openAddCustomerModal()">
+                            <i class="fas fa-plus"></i> Add New Customer
+                        </button>
+                        <button class="btn btn-info" onclick="printCustomerList()">
+                            <i class="fas fa-print"></i> Print Customer List
+                        </button>
+                        <button class="btn btn-success" onclick="exportCustomerList()">
+                            <i class="fas fa-download"></i> Export CSV
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Customers Cards Grid -->
+                <div class="customers-cards-container">
+                    <div class="customers-cards-grid" id="customersCards">
+                        <!-- Customer cards will be populated here -->
+                    </div>
+                </div>
+                
+                <!-- Mobile Cards Container for Customers -->
+                <div class="mobile-cards-container">
+                    <div class="mobile-cards-grid" id="mobileCustomerCards"></div>
+                </div>
+            </div>
+
+            <!-- Work In Progress Tab -->
+            <div id="wip" class="tab-content">
+                <div class="section-header">
+                    <h2>Work In Progress</h2>
+                    <div class="wip-actions">
+                        <button class="btn btn-success" onclick="markAllWIPComplete()">
+                            <i class="fas fa-check-double"></i> Mark All Complete
+                        </button>
+                    </div>
+                </div>
+
+                <div class="wip-stats">
+                    <div class="stat-card">
+                        <div class="stat-number" id="wipCount">0</div>
+                        <div class="stat-label">In Progress</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="wipPendingCount">0</div>
+                        <div class="stat-label">Pending</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="wipCompletedToday">0</div>
+                        <div class="stat-label">Completed Today</div>
+                    </div>
+                </div>
+
+                <div class="wip-filters">
+                    <input type="text" id="wipSearch" placeholder="Search WIP items..." onkeyup="filterWIP()">
+                    <select id="wipStatusFilter" onchange="filterWIP()" aria-label="Filter work in progress by status">
+                        <option value="">All Status</option>
+                        <option value="pending">Pending</option>
+                        <option value="in-progress">In Progress</option>
+                        <option value="work-in-progress">Work in Progress</option>
+                    </select>
+                    <select id="wipPriorityFilter" onchange="filterWIP()" aria-label="Filter work in progress by priority">
+                        <option value="">All Priority</option>
+                        <option value="high">High Priority</option>
+                        <option value="medium">Medium Priority</option>
+                        <option value="low">Low Priority</option>
+                    </select>
+                </div>
+
+                <div id="wipGrid" class="wip-grid">
+                    <!-- WIP items will be loaded here -->
+                </div>
+                
+                <!-- Mobile Cards Container for WIP -->
+                <div class="mobile-cards-container">
+                    <div class="mobile-cards-grid" id="mobileWIPCards"></div>
+                </div>
+            </div>
+
+            <!-- Gallery Tab -->
+            <div id="gallery" class="tab-content">
+                <div class="section-header">
+                    <h2>Work Gallery</h2>
+                    <button class="btn btn-primary" onclick="openAddPhotoModal()">
+                        <i class="fas fa-plus"></i> Add Photo
+                    </button>
+                </div>
+
+                <div class="gallery-filters">
+                    <select id="galleryStatusFilter" onchange="filterGallery()" aria-label="Filter gallery by status">
+                        <option value="">All Items</option>
+                        <option value="completed">Completed</option>
+                        <option value="sold">Sold</option>
+                        <option value="work-in-progress">Work in Progress</option>
+                    </select>
+                    <input type="text" id="gallerySearch" placeholder="Search gallery..." onkeyup="filterGallery()">
+                </div>
+
+                <div id="galleryGrid" class="gallery-grid">
+                    <!-- Gallery items will be loaded here -->
+                </div>
+                
+                <!-- Mobile Cards Container for Gallery -->
+                <div class="mobile-cards-container">
+                    <div class="mobile-cards-grid" id="mobileGalleryCards"></div>
+                </div>
+            </div>
+
+            <!-- Sales Tab -->
+            <div id="sales" class="tab-content">
+                <div class="section-header">
+                    <h2>Sales Management</h2>
+                    <div class="section-actions">
+                        <button class="btn btn-outline" onclick="updateExistingSalesWithCommission()" title="Update existing sales with commission fields">
+                            <i class="fas fa-sync-alt"></i> Update Commission Data
+                        </button>
+                        <button class="btn btn-outline" onclick="cleanupInvalidInvoices()" title="Remove any invoices containing shop sales">
+                            <i class="fas fa-broom"></i> Clean Invalid Invoices
+                        </button>
+                        <button class="btn btn-secondary" onclick="openAddSaleModal()">
+                            <i class="fas fa-plus"></i> Record Sale
+                        </button>
+                        <button class="btn btn-outline" onclick="toggleDetailedView()" id="toggleViewBtn">
+                            <i class="fas fa-list"></i> Detailed View
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Sales Cards Grid -->
+                <div class="sales-cards-container">
+                    <div class="sales-cards-grid" id="salesCards">
+                        <!-- Sales cards will be populated here -->
+                    </div>
+                </div>
+                
+                <!-- Mobile Cards Container for Sales -->
+                <div class="mobile-cards-container">
+                    <div class="mobile-cards-grid" id="mobileSalesCards"></div>
+                </div>
+            </div>
+
+        <!-- Completed Items Tab -->
+        <div id="completed" class="tab-content">
+            <div class="section-header">
+                <h2>Completed Items</h2>
+                    <div class="section-actions">
+                        <button class="btn btn-success" onclick="addCompletedItem()">
+                            <i class="fas fa-plus"></i> Add Completed Item
+                        </button>
+                        <button class="btn btn-primary" onclick="createInvoiceFromSelected()">
+                            <i class="fas fa-file-invoice"></i> Create Invoice from Selected
+                        </button>
+                        <button class="btn btn-info" onclick="printFilteredCompletedItems()">
+                            <i class="fas fa-print"></i> Print Filtered Items
+                        </button>
+                        <button class="btn btn-secondary" onclick="selectAllCompleted()">
+                            <i class="fas fa-check-square"></i> Select All
+                        </button>
+                <button class="btn btn-outline" onclick="clearCompletedSelection()">
+                    <i class="fas fa-square"></i> Clear Selection
+                </button>
+                <button class="btn btn-warning" onclick="clearAllExpandedCustomerGroups()" title="Debug: Clear all expanded customer groups">
+                    <i class="fas fa-compress"></i> Collapse All
+                </button>
+                    </div>
+                </div>
+
+                <!-- Filters Section -->
+                <div class="filters-section" style="margin-bottom: 1rem; padding: 0 1rem;">
+                    <div class="filter-row" style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
+                        <!-- Search -->
+                        <div class="filter-item">
+                            <input type="text" id="completedSearchItems" placeholder="Search completed items..." 
+                                   oninput="filterCompletedItems()" style="padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px; width: 200px;">
+                        </div>
+                        
+                        <!-- Customer Filter -->
+                        <div class="filter-item">
+                            <select id="completedCustomerFilter" onchange="filterCompletedItems()" style="padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;" aria-label="Filter completed items by customer">
+                                <option value="">All Customers</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Date Range Filter -->
+                        <div class="filter-item">
+                            <select id="completedDateFilter" onchange="filterCompletedItems()" style="padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;" aria-label="Filter completed items by date">
+                                <option value="">All Dates</option>
+                                <option value="today">Today</option>
+                                <option value="week">This Week</option>
+                                <option value="month">This Month</option>
+                                <option value="quarter">This Quarter</option>
+                                <option value="year">This Year</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Clear Filters -->
+                        <div class="filter-item">
+                            <button class="btn btn-outline btn-sm" onclick="clearCompletedFilters()" style="padding: 0.5rem 1rem;">
+                                <i class="fas fa-times"></i> Clear Filters
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Select All Checkbox -->
+                <div style="margin-bottom: 1rem; padding: 0 1rem;">
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <input type="checkbox" id="selectAllCheckbox" onchange="toggleSelectAll(this)" style="cursor: pointer;">
+                        <span style="cursor: pointer;" onclick="document.getElementById('selectAllCheckbox').click()">Select All Completed Items</span>
+                    </div>
+                </div>
+
+                <!-- Completed Items Cards Grid -->
+                <div class="completed-cards-container">
+                    <div class="completed-cards-grid" id="completedItemsCards">
+                        <!-- Cards will be populated here -->
+                    </div>
+                </div>
+                
+                <!-- Invoice Summary -->
+                <div id="invoiceSummary" class="invoice-summary" style="display: none;">
+                    <h3>Invoice Summary</h3>
+                    <p><strong>Selected Items:</strong> <span id="selectedCount">0</span></p>
+                    <p><strong>Total Amount:</strong> $<span id="selectedTotal">0.00</span></p>
+                </div>
+            </div>
+
+            <!-- Ideas Tab -->
+            <div id="ideas" class="tab-content">
+                <div class="section-header">
+                    <h2>Inspiration & Ideas</h2>
+                    <div class="ideas-actions">
+                        <button class="btn btn-primary" onclick="openAddIdeaModal()">
+                            <i class="fas fa-plus"></i> Add New Idea
+                        </button>
+                        <button class="btn btn-secondary" onclick="exportIdeas()">
+                            <i class="fas fa-download"></i> Export Ideas
+                        </button>
+                    </div>
+                </div>
+
+                <div class="ideas-filters">
+                    <input type="text" id="ideasSearch" placeholder="Search ideas..." onkeyup="filterIdeas()">
+                    <select id="ideasCategoryFilter" onchange="filterIdeas()" aria-label="Filter ideas by category">
+                        <option value="">All Categories</option>
+                        <option value="web">Web Inspiration</option>
+                        <option value="book">Book/Pattern</option>
+                        <option value="custom">Custom Design</option>
+                        <option value="technique">Technique</option>
+                        <option value="color">Color Scheme</option>
+                        <option value="style">Style</option>
+                        <option value="other">Other</option>
+                    </select>
+                    <select id="ideasStatusFilter" onchange="filterIdeas()" aria-label="Filter ideas by status">
+                        <option value="">All Status</option>
+                        <option value="new">New Idea</option>
+                        <option value="in-progress">In Progress</option>
+                        <option value="completed">Completed</option>
+                        <option value="archived">Archived</option>
+                    </select>
+                </div>
+
+                <div id="ideasGrid" class="ideas-grid">
+                    <!-- Ideas will be loaded here -->
+                </div>
+                
+                <!-- Mobile Cards Container for Ideas -->
+                <div class="mobile-cards-container">
+                    <div class="mobile-cards-grid" id="mobileIdeasCards"></div>
+                </div>
+            </div>
+
+            <!-- Reports Tab -->
+            <div id="reports" class="tab-content">
+                <div class="section-header">
+                    <h2>Reports & Analytics Dashboard</h2>
+                    <div class="report-actions">
+                        <button class="btn btn-primary" onclick="generateComprehensiveReport()">
+                            <i class="fas fa-chart-bar"></i> Generate Full Report
+                        </button>
+                        <button class="btn btn-info" onclick="generateTestReport()" title="Generate a test report with sample data">
+                            <i class="fas fa-flask"></i> Generate Test Report
+                        </button>
+                        <button class="btn btn-secondary" onclick="printCurrentReport()">
+                            <i class="fas fa-print"></i> Print Report
+                        </button>
+                        <button class="btn btn-info" onclick="exportData()">
+                            <i class="fas fa-download"></i> Export Data
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Statistics Dashboard -->
+                <div class="reports-dashboard">
+                    <div class="dashboard-stats">
+                        <div class="stat-card">
+                            <div class="stat-number" id="totalProjects">0</div>
+                            <div class="stat-label">Total Projects</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="totalRevenue">$0.00</div>
+                            <div class="stat-label">Total Revenue</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="completedProjects">0</div>
+                            <div class="stat-label">Completed</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="activeCustomers">0</div>
+                            <div class="stat-label">Active Customers</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="avgProjectValue">$0.00</div>
+                            <div class="stat-label">Avg Project Value</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="completionRate">0%</div>
+                            <div class="stat-label">Completion Rate</div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Reports Section -->
+                    <div class="quick-reports">
+                        <h3>Quick Reports</h3>
+                        <div class="report-buttons">
+                            <button class="btn btn-outline" onclick="generateFinancialReport()">
+                                <i class="fas fa-dollar-sign"></i> Financial Summary
+                            </button>
+                            <button class="btn btn-outline" onclick="generateCustomerReport()">
+                                <i class="fas fa-users"></i> Customer Analytics
+                            </button>
+                            <button class="btn btn-outline" onclick="generateProductivityReport()">
+                                <i class="fas fa-tasks"></i> Productivity Report
+                            </button>
+                            <button class="btn btn-outline" onclick="generateInventoryReport()">
+                                <i class="fas fa-boxes"></i> Inventory Status
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Report Filters -->
+                    <div class="report-filters">
+                        <h3>Report Filters</h3>
+                        <div class="filter-row">
+                            <select id="reportLocationFilter">
+                                <option value="">All Locations</option>
+                            </select>
+                            <select id="reportStatusFilter">
+                                <option value="">All Status</option>
+                                <option value="pending">Pending</option>
+                                <option value="in-progress">In Progress</option>
+                                <option value="work-in-progress">Work in Progress</option>
+                                <option value="completed">Completed</option>
+                                <option value="sold">Sold</option>
+                            </select>
+                            <select id="reportDateFilter">
+                                <option value="">All Time</option>
+                                <option value="today">Today</option>
+                                <option value="week">This Week</option>
+                                <option value="month">This Month</option>
+                                <option value="quarter">This Quarter</option>
+                                <option value="year">This Year</option>
+                            </select>
+                            <input type="date" id="reportStartDate" placeholder="Start Date">
+                            <input type="date" id="reportEndDate" placeholder="End Date">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Report Content Area -->
+                <div id="reportContent" class="report-content">
+                    <div class="welcome-message">
+                        <i class="fas fa-chart-line"></i>
+                        <h3>Welcome to Reports & Analytics</h3>
+                        <p>Select a quick report above or use the filters to generate custom reports. View your business insights and track your embroidery business performance.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Management Tab -->
+            <div id="data" class="tab-content">
+                <div class="section-header">
+                    <h2>Data Management & Backup</h2>
+                    <div class="data-actions">
+                        <button class="btn btn-primary" onclick="dataManager.createBackup('manual')">
+                            <i class="fas fa-save"></i> Create Backup
+                        </button>
+                        <button class="btn btn-info" onclick="dataManager.exportAllData()">
+                            <i class="fas fa-download"></i> Export All Data
+                        </button>
+                        <button class="btn btn-warning" onclick="openImportModal()">
+                            <i class="fas fa-upload"></i> Import Data
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Data Statistics -->
+                <div class="data-stats">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalDataItems">0</div>
+                        <div class="stat-label">Total Items</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="dataSize">0 KB</div>
+                        <div class="stat-label">Data Size</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="lastBackup">Never</div>
+                        <div class="stat-label">Last Backup</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="backupCount">0</div>
+                        <div class="stat-label">Backups</div>
+                    </div>
+                </div>
+
+                <!-- Backup Management -->
+                <div class="data-section">
+                    <h3><i class="fas fa-database"></i> Backup Management</h3>
+                    <div class="backup-controls">
+                        <div class="backup-settings">
+                            <label>
+                                <input type="checkbox" id="autoBackupEnabled" checked onchange="toggleAutoBackup()">
+                                Enable Auto-Backup
+                            </label>
+                            <select id="backupFrequency" onchange="changeBackupFrequency()">
+                                <option value="1">Every Hour</option>
+                                <option value="6">Every 6 Hours</option>
+                                <option value="12">Every 12 Hours</option>
+                                <option value="24" selected>Every 24 Hours</option>
+                                <option value="168">Every Week</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-outline" onclick="runDataIntegrityCheck()">
+                            <i class="fas fa-check-circle"></i> Check Data Integrity
+                        </button>
+                    </div>
+                    
+                    <div class="backup-list">
+                        <h4>Recent Backups</h4>
+                        <div id="backupList" class="backup-items">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Export Options -->
+                <div class="data-section">
+                    <h3><i class="fas fa-download"></i> Export Options</h3>
+                    <div class="export-options">
+                        <button class="btn btn-outline" onclick="exportInventoryCSV()">
+                            <i class="fas fa-file-csv"></i> Export Inventory (CSV)
+                        </button>
+                        <button class="btn btn-outline" onclick="exportCustomersCSV()">
+                            <i class="fas fa-file-csv"></i> Export Customers (CSV)
+                        </button>
+                        <button class="btn btn-outline" onclick="exportSalesCSV()">
+                            <i class="fas fa-file-csv"></i> Export Sales (CSV)
+                        </button>
+                        <button class="btn btn-outline" onclick="exportAllJSON()">
+                            <i class="fas fa-file-code"></i> Export All (JSON)
+                        </button>
+                        <button class="btn btn-outline" onclick="exportReportPDF()">
+                            <i class="fas fa-file-pdf"></i> Export Report (PDF)
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Data History -->
+                <div class="data-section">
+                    <h3><i class="fas fa-history"></i> Change History</h3>
+                    <div class="change-history">
+                        <div id="changeHistoryList" class="history-items">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Authentication Modal -->
+    <div id="authModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeAuthModal">&times;</span>
+            <h2><i class="fas fa-lock"></i> Authentication Required</h2>
+            <p>Please login to add/edit/delete items:</p>
+            <form id="authForm" novalidate>
+                <div class="form-group">
+                    <label for="adminUsername">Username:</label>
+                    <input type="text" id="adminUsername" name="adminUsername" required autocomplete="username" maxlength="50" value="admin">
+                </div>
+                <div class="form-group">
+                    <label for="adminPassword">Password:</label>
+                    <div class="password-input-container">
+                        <input type="password" id="adminPassword" name="adminPassword" required autocomplete="current-password" maxlength="50">
+                        <button type="button" class="password-toggle" onclick="togglePassword('adminPassword')">
+                            <i class="fas fa-eye" id="adminPassword-icon"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-sign-in-alt"></i> Login
+                    </button>
+                    <button type="button" class="btn btn-secondary" id="cancelAuth">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
+                </div>
+            </form>
+            <div id="authError" class="error-message" style="display: none;">
+                <i class="fas fa-exclamation-triangle"></i> <span id="authErrorText">Invalid credentials. Please try again.</span>
+            </div>
+            <div class="auth-footer" style="display: none;">
+                <p class="text-muted"><small>To enable/disable authentication or change credentials, edit <code>data/auth.json</code> and restart the server.</small></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Change Password Modal -->
+    <div id="changePasswordModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeChangePasswordModal">&times;</span>
+            <h2><i class="fas fa-key"></i> Change Admin Password</h2>
+            <p>Enter a new password for Sales and Reports access:</p>
+            <form id="changePasswordForm">
+                <div class="form-group">
+                    <label for="currentPassword">Current Password:</label>
+                    <div class="password-input-container">
+                        <input type="password" id="currentPassword" name="currentPassword" required>
+                        <button type="button" class="password-toggle" onclick="togglePassword('currentPassword')">
+                            <i class="fas fa-eye" id="currentPassword-icon"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="newPassword">New Password:</label>
+                    <div class="password-input-container">
+                        <input type="password" id="newPassword" name="newPassword" required minlength="4">
+                        <button type="button" class="password-toggle" onclick="togglePassword('newPassword')">
+                            <i class="fas fa-eye" id="newPassword-icon"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm New Password:</label>
+                    <div class="password-input-container">
+                        <input type="password" id="confirmPassword" name="confirmPassword" required minlength="4">
+                        <button type="button" class="password-toggle" onclick="togglePassword('confirmPassword')">
+                            <i class="fas fa-eye" id="confirmPassword-icon"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Change Password
+                    </button>
+                    <button type="button" class="btn btn-secondary" id="cancelChangePassword">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
+                </div>
+            </form>
+            <div id="changePasswordError" class="error-message" style="display: none;">
+                <i class="fas fa-exclamation-triangle"></i> <span id="changePasswordErrorText"></span>
+            </div>
+            <div id="changePasswordSuccess" class="success-message" style="display: none;">
+                <i class="fas fa-check-circle"></i> Password changed successfully!
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div id="addItemModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('addItemModal')">&times;</span>
+            <h3 id="addItemModalTitle">Add New Item</h3>
+            <form id="addItemForm" class="modal-form" novalidate>
+                <div class="form-group full-width">
+                    <label for="itemDescription">Description *</label>
+                    <input type="text" id="itemDescription" required maxlength="200" placeholder="e.g., Embroidery Thread - Red, 4-inch Hoop, Cotton Fabric">
+                </div>
+                <div class="form-group half-width">
+                    <label for="itemQuantity">Quantity</label>
+                    <input type="number" id="itemQuantity" min="1" value="1">
+                </div>
+                <div class="form-group half-width">
+                    <label for="itemType">Type</label>
+                    <select id="itemType" onchange="updateStatusOptions()">
+                        <option value="inventory">Inventory (Supplies/Materials)</option>
+                        <option value="project">Project (Customer Work)</option>
+                    </select>
+                </div>
+                <!-- Inventory-specific fields (hidden for projects) -->
+                <div id="inventoryFields">
+                    <div class="form-group half-width">
+                        <label for="itemStatus">Status</label>
+                        <select id="itemStatus">
+                            <option value="available">Available</option>
+                            <option value="low-stock">Low Stock</option>
+                            <option value="out-of-stock">Out of Stock</option>
+                        </select>
+                    </div>
+                    <div class="form-group half-width">
+                        <label for="itemPrice">Cost (per unit)</label>
+                        <input type="number" id="itemPrice" step="0.01" min="0" placeholder="0.00">
+                    </div>
+                    <div class="form-group half-width">
+                        <label for="itemTotalPrice">Total Value</label>
+                        <input type="number" id="itemTotalPrice" step="0.01" min="0" readonly>
+                    </div>
+                    <div class="form-group half-width">
+                        <label for="itemLocation">Location</label>
+                        <input type="text" id="itemLocation" placeholder="e.g., Craft Room, Garage" maxlength="100">
+                    </div>
+                    <div class="form-group half-width">
+                        <label for="itemSupplier">Supplier</label>
+                        <input type="text" id="itemSupplier" placeholder="e.g., Joann's, Amazon, Local Store" maxlength="100">
+                    </div>
+                    <div class="form-group half-width">
+                        <label for="itemReorderPoint">Reorder Point</label>
+                        <input type="number" id="itemReorderPoint" min="0" placeholder="Minimum quantity before reordering">
+                    </div>
+                </div>
+                <div class="form-group half-width">
+                    <label for="itemNotes">Notes</label>
+                    <input type="text" id="itemNotes" placeholder="Color, size, special instructions, etc." maxlength="500">
+                </div>
+                <div class="form-group full-width">
+                    <label for="itemPhoto">Photo</label>
+                    <div class="photo-input-container">
+                        <input type="file" id="itemPhoto" accept="image/*">
+                        <button type="button" class="btn btn-outline" onclick="openCameraForProject()" title="Take Photo with Camera">
+                            <i class="fas fa-camera"></i> Take Photo
+                        </button>
+                        <button type="button" class="btn btn-secondary" onclick="analyzePhotoForProject()" title="Analyze Photo to Auto-Fill Fields" id="analyzeProjectBtn" disabled>
+                            <i class="fas fa-search"></i> Analyze Photo
+                        </button>
+                    </div>
+                    <small>Add a photo of your inventory item or project. Use "Analyze Photo" to auto-fill fields from text in the image.</small>
+                </div>
+                <div id="projectFields" style="display: none;">
+                    <div class="form-group half-width">
+                        <label for="itemProjectStatus">Status</label>
+                        <select id="itemProjectStatus">
+                            <option value="pending">Pending</option>
+                            <option value="in-progress">In Progress</option>
+                            <option value="work-in-progress">Work in Progress</option>
+                            <option value="completed">Completed</option>
+                            <option value="sold">Sold</option>
+                        </select>
+                    </div>
+                    <div class="form-group half-width">
+                        <label for="itemCustomer">Customer</label>
+                        <div class="input-with-button">
+                            <select id="itemCustomer">
+                                <option value="">Select Customer (Optional)</option>
+                            </select>
+                            <button type="button" class="btn btn-outline btn-sm" onclick="openAddCustomerModal()" title="Add New Customer">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="form-group half-width">
+                        <label for="itemDueDate">Due Date</label>
+                        <input type="date" id="itemDueDate">
+                    </div>
+                    <div class="form-group half-width">
+                        <label for="itemPriority">Priority</label>
+                        <select id="itemPriority">
+                            <option value="medium">Medium</option>
+                            <option value="high">High</option>
+                            <option value="low">Low</option>
+                        </select>
+                    </div>
+                    <div class="form-group half-width">
+                        <label for="itemPatternLink">Pattern Link (Google Drive)</label>
+                        <input type="url" id="itemPatternLink" placeholder="https://drive.google.com/file/d/..." maxlength="500">
+                        <small class="form-help">Paste your Google Drive shareable link here</small>
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="itemTags">Tags (comma-separated)</label>
+                        <input type="text" id="itemTags" placeholder="e.g., wedding, baby, holiday" maxlength="200">
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('addItemModal')">Cancel</button>
+                    <button type="button" class="btn btn-info" onclick="copyFromLastItem()" title="Copy from last added item">
+                        <i class="fas fa-copy"></i> Copy Last
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Add Item
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Dedicated Add New Inventory Modal -->
+    <div id="addInventoryModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('addInventoryModal')">&times;</span>
+            <h3>Add New Inventory Item</h3>
+            <form id="addInventoryForm" class="modal-form" novalidate>
+                <div class="form-group full-width">
+                    <label for="inventoryDescription">Description *</label>
+                    <input type="text" id="inventoryDescription" required maxlength="200" placeholder="e.g., Embroidery Thread - Red, 4-inch Hoop, Cotton Fabric">
+                </div>
+                <div class="form-group half-width">
+                    <label for="inventoryQuantity">Quantity</label>
+                    <input type="number" id="inventoryQuantity" min="1" value="1">
+                </div>
+                <div class="form-group half-width">
+                    <label for="inventoryStatus">Status</label>
+                    <select id="inventoryStatus">
+                        <option value="available">Available</option>
+                        <option value="low-stock">Low Stock</option>
+                        <option value="out-of-stock">Out of Stock</option>
+                    </select>
+                </div>
+                <div class="form-group half-width">
+                    <label for="inventoryPrice">Cost (per unit)</label>
+                    <input type="number" id="inventoryPrice" step="0.01" min="0" placeholder="0.00">
+                </div>
+                <div class="form-group half-width">
+                    <label for="inventoryTotalPrice">Total Value</label>
+                    <input type="number" id="inventoryTotalPrice" step="0.01" min="0" readonly>
+                </div>
+                <div class="form-group half-width">
+                    <label for="inventorySupplier">Supplier</label>
+                    <input type="text" id="inventorySupplier" placeholder="e.g., Joann's, Amazon, Local Store" maxlength="100">
+                </div>
+                <div class="form-group half-width">
+                    <label for="inventoryReorderPoint">Reorder Point</label>
+                    <input type="number" id="inventoryReorderPoint" min="0" placeholder="Minimum quantity before reordering">
+                </div>
+                <div class="form-group half-width">
+                    <label for="inventoryNotes">Notes</label>
+                    <input type="text" id="inventoryNotes" placeholder="Color, size, special instructions, etc." maxlength="500">
+                </div>
+                <div class="form-group full-width">
+                    <label for="inventoryPhoto">Photo</label>
+                    <div class="photo-input-container">
+                        <input type="file" id="inventoryPhoto" accept="image/*">
+                        <button type="button" class="btn btn-outline" onclick="openCameraForInventory()" title="Take Photo with Camera">
+                            <i class="fas fa-camera"></i> Take Photo
+                        </button>
+                        <button type="button" class="btn btn-secondary" onclick="analyzePhotoForInventory()" title="Analyze Photo to Auto-Fill Fields" id="analyzeInventoryBtn" disabled>
+                            <i class="fas fa-search"></i> Analyze Photo
+                        </button>
+                    </div>
+                    <small>Add a photo of your inventory item. Use "Analyze Photo" to auto-fill fields from text in the image.</small>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('addInventoryModal')">Cancel</button>
+                    <button type="button" class="btn btn-info" onclick="copyFromLastInventory()" title="Copy from last added inventory item">
+                        <i class="fas fa-copy"></i> Copy Last
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Add Inventory Item
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Dedicated Add New Project Modal -->
+    <div id="addProjectModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('addProjectModal')">&times;</span>
+            <h3>Add New Project</h3>
+            <form id="addProjectForm" class="modal-form" novalidate>
+                <div class="form-group full-width">
+                    <label for="projectDescription">Description *</label>
+                    <input type="text" id="projectDescription" required maxlength="200" placeholder="e.g., Custom Wedding Dress Embroidery, Baby Blanket, Holiday Decorations">
+                </div>
+                <div class="form-group half-width">
+                    <label for="projectQuantity">Quantity</label>
+                    <input type="number" id="projectQuantity" min="1" value="1">
+                </div>
+                <div class="form-group half-width">
+                    <label for="projectStatus">Status</label>
+                    <select id="projectStatus">
+                        <option value="pending">Pending</option>
+                        <option value="in-progress">In Progress</option>
+                        <option value="work-in-progress">Work in Progress</option>
+                        <option value="completed">Completed</option>
+                        <option value="sold">Sold</option>
+                    </select>
+                </div>
+                <div class="form-group half-width">
+                    <label for="projectCustomer">Customer</label>
+                    <div class="input-with-button">
+                        <select id="projectCustomer">
+                            <option value="">Select Customer (Optional)</option>
+                        </select>
+                        <button type="button" class="btn btn-outline btn-sm" onclick="openAddCustomerModal()" title="Add New Customer">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="form-group half-width">
+                    <label for="projectDueDate">Due Date</label>
+                    <input type="date" id="projectDueDate">
+                </div>
+                <div class="form-group half-width">
+                    <label for="projectPriority">Priority</label>
+                    <select id="projectPriority">
+                        <option value="low">Low</option>
+                        <option value="medium" selected>Medium</option>
+                        <option value="high">High</option>
+                        <option value="urgent">Urgent</option>
+                    </select>
+                </div>
+                <div class="form-group half-width">
+                    <label for="projectPrice">Price</label>
+                    <input type="number" id="projectPrice" step="0.01" min="0" placeholder="0.00">
+                </div>
+                <div class="form-group half-width">
+                    <label for="projectLocation">Location</label>
+                    <input type="text" id="projectLocation" placeholder="e.g., Craft Room, Studio" maxlength="100">
+                </div>
+                <div class="form-group half-width">
+                    <label for="projectYarnColor">Yarn Color</label>
+                    <input type="text" id="projectYarnColor" placeholder="e.g., Navy Blue, Forest Green" maxlength="100">
+                </div>
+                <div class="form-group half-width">
+                    <label for="projectYarnAmount">Yarn Amount</label>
+                    <input type="text" id="projectYarnAmount" placeholder="e.g., 3 skeins, 200g, 2 balls" maxlength="100">
+                </div>
+                <div class="form-group half-width">
+                    <label for="projectPatternLink">Pattern Link (Google Drive)</label>
+                    <input type="url" id="projectPatternLink" placeholder="https://drive.google.com/file/d/..." maxlength="500">
+                </div>
+                <div class="form-group half-width">
+                    <label for="projectTags">Tags (comma-separated)</label>
+                    <input type="text" id="projectTags" placeholder="e.g., wedding, baby, holiday" maxlength="200">
+                </div>
+                <div class="form-group full-width">
+                    <label for="projectNotes">Notes</label>
+                    <textarea id="projectNotes" placeholder="Special instructions, color preferences, size requirements, etc." maxlength="500" rows="3"></textarea>
+                </div>
+                <!-- Projects don't need images - they're tracked through inventory, ideas, and gallery -->
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('addProjectModal')">Cancel</button>
+                    <button type="button" class="btn btn-info" onclick="copyFromLastProject()" title="Copy from last added project">
+                        <i class="fas fa-copy"></i> Copy Last
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Add Project
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="addCustomerModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('addCustomerModal')">&times;</span>
+            <h3>Add New Customer</h3>
+            <form id="addCustomerForm" class="modal-form" novalidate>
+                <div class="form-group half-width">
+                    <label for="customerName">Customer Name *</label>
+                    <input type="text" id="customerName" required maxlength="100">
+                </div>
+                <div class="form-group half-width">
+                    <label for="customerLocation">Location</label>
+                    <input type="text" id="customerLocation" maxlength="100">
+                </div>
+                <div class="form-group full-width">
+                    <label for="customerContact">Contact Info</label>
+                    <input type="text" id="customerContact" placeholder="Phone, email, etc." maxlength="200">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('addCustomerModal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add Customer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Customer Modal -->
+    <div id="editCustomerModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('editCustomerModal')">&times;</span>
+            <h3>Edit Customer</h3>
+            <form id="editCustomerForm" class="modal-form" novalidate>
+                <div class="form-group half-width">
+                    <label for="editCustomerName">Customer Name *</label>
+                    <input type="text" id="editCustomerName" required maxlength="100">
+                </div>
+                <div class="form-group half-width">
+                    <label for="editCustomerLocation">Location</label>
+                    <input type="text" id="editCustomerLocation" maxlength="100">
+                </div>
+                <div class="form-group full-width">
+                    <label for="editCustomerContact">Contact Info</label>
+                    <input type="text" id="editCustomerContact" placeholder="Phone, email, etc." maxlength="200">
+                </div>
+                <div class="form-group half-width">
+                    <label for="editCustomerStatus">Status</label>
+                    <select id="editCustomerStatus">
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('editCustomerModal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Update Customer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="addSaleModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('addSaleModal')">&times;</span>
+            <h3>Record Sale</h3>
+            <form id="addSaleForm" class="modal-form" novalidate>
+                <div class="form-group half-width">
+                    <label for="saleType">Sale Type</label>
+                    <select id="saleType" onchange="toggleSaleItemType()">
+                        <option value="">Select Sale Type</option>
+                        <option value="inventory">From Inventory</option>
+                        <option value="custom">Custom Item</option>
+                    </select>
+                </div>
+                
+                <div class="form-group half-width">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="saleChannel" checked>
+                        <span class="checkmark"></span>
+                        Shop/Retailer Sale (uncheck for individual customer)
+                    </label>
+                </div>
+                
+                <!-- Inventory Item Selection -->
+                <div id="inventorySaleFields">
+                    <div class="form-group half-width">
+                        <label for="saleItem">Item</label>
+                        <select id="saleItem">
+                            <option value="">Select Item</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Custom Item Fields -->
+                <div id="customSaleFields" style="display: none;">
+                    <div class="form-group half-width">
+                        <label for="customItemName">Item Name</label>
+                        <input type="text" id="customItemName" placeholder="Enter item name" maxlength="200">
+                    </div>
+                    <div class="form-group half-width">
+                        <label for="customItemDescription">Description</label>
+                        <input type="text" id="customItemDescription" placeholder="Item description" maxlength="500">
+                    </div>
+                </div>
+                
+                <div class="form-group half-width">
+                    <label for="listedPrice">Listed Price</label>
+                    <input type="number" id="listedPrice" step="0.01" min="0" placeholder="Original price" oninput="calculateSalePriceFromCommission()">
+                    <small class="form-help">The original/regular price</small>
+                </div>
+                <div class="form-group half-width">
+                    <label for="salePrice">Net Price (What You Receive)</label>
+                    <input type="number" id="salePrice" step="0.01" min="0" placeholder="Amount you receive after commission" oninput="calculateDiscount()">
+                    <small class="form-help">The amount you receive after commission (auto-calculated from list price and commission)</small>
+                </div>
+                <div class="form-group full-width">
+                    <div id="discountInfo" class="discount-info" style="display: none;">
+                        <span id="discountAmount"></span> | 
+                        <span id="discountPercentage"></span>
+                    </div>
+                    <div id="autoCalculateInfo" class="auto-calculate-info" style="display: none;">
+                        <i class="fas fa-calculator"></i> Net price auto-calculated from list price and commission
+                    </div>
+                </div>
+                <div class="form-group half-width">
+                    <label for="saleDate">Sale Date</label>
+                    <input type="date" id="saleDate">
+                </div>
+                <div class="form-group half-width">
+                    <label for="saleCustomer">Customer/Location</label>
+                    <input type="text" id="saleCustomer" placeholder="Customer name or store location" maxlength="200">
+                </div>
+                <div class="form-group half-width">
+                    <label for="saleCommission">Commission %</label>
+                    <input type="number" id="saleCommission" step="0.01" min="0" max="100" placeholder="0.00" oninput="calculateSalePriceFromCommission()">
+                    <small class="form-help">Shop commission percentage (if applicable)</small>
+                </div>
+                <div class="form-group half-width">
+                    <label for="saleNotes">Notes</label>
+                    <input type="text" id="saleNotes" placeholder="Additional notes" maxlength="500">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('addSaleModal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Record Sale</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Sale Modal -->
+    <div id="editSaleModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('editSaleModal')">&times;</span>
+            <h3>Edit Sale</h3>
+            <form id="editSaleForm" class="modal-form" novalidate>
+                <input type="hidden" id="editSaleIndex">
+                
+                <div class="form-group half-width">
+                    <label for="editSaleType">Sale Type</label>
+                    <select id="editSaleType" onchange="toggleEditSaleItemType()">
+                        <option value="">Select Sale Type</option>
+                        <option value="inventory">From Inventory</option>
+                        <option value="custom">Custom Item</option>
+                    </select>
+                </div>
+                
+                <div class="form-group half-width">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="editSaleChannel">
+                        <span class="checkmark"></span>
+                        Shop/Retailer Sale (uncheck for individual customer)
+                    </label>
+                </div>
+                
+                <!-- Inventory Item Selection -->
+                <div id="editInventorySaleFields">
+                    <div class="form-group half-width">
+                        <label for="editSaleItem">Item</label>
+                        <select id="editSaleItem">
+                            <option value="">Select Item</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Custom Item Fields -->
+                <div id="editCustomSaleFields" style="display: none;">
+                    <div class="form-group half-width">
+                        <label for="editCustomItemName">Item Name</label>
+                        <input type="text" id="editCustomItemName" placeholder="Enter item name">
+                    </div>
+                    <div class="form-group half-width">
+                        <label for="editCustomItemDescription">Description</label>
+                        <input type="text" id="editCustomItemDescription" placeholder="Item description">
+                    </div>
+                </div>
+                
+                <div class="form-group half-width">
+                    <label for="editListedPrice">Listed Price</label>
+                    <input type="number" id="editListedPrice" step="0.01" min="0" placeholder="Original price" oninput="calculateEditSalePriceFromCommission()">
+                    <small class="form-help">The original/regular price</small>
+                </div>
+                <div class="form-group half-width">
+                    <label for="editSalePrice">Net Price (What You Receive)</label>
+                    <input type="number" id="editSalePrice" step="0.01" min="0" placeholder="Amount you receive after commission" oninput="calculateEditDiscount()">
+                    <small class="form-help">The amount you receive after commission</small>
+                </div>
+                <div class="form-group full-width">
+                    <div id="editDiscountInfo" class="discount-info" style="display: none;">
+                        <span id="editDiscountAmount"></span> | 
+                        <span id="editDiscountPercentage"></span>
+                    </div>
+                    <div id="editAutoCalculateInfo" class="auto-calculate-info" style="display: none;">
+                        <i class="fas fa-calculator"></i> Net price auto-calculated from list price and commission
+                    </div>
+                </div>
+                <div class="form-group half-width">
+                    <label for="editSaleDate">Sale Date</label>
+                    <input type="date" id="editSaleDate">
+                </div>
+                <div class="form-group half-width">
+                    <label for="editSaleCustomer">Customer/Location</label>
+                    <input type="text" id="editSaleCustomer" placeholder="Customer name or store location">
+                </div>
+                <div class="form-group half-width">
+                    <label for="editSaleCommission">Commission %</label>
+                    <input type="number" id="editSaleCommission" step="0.01" min="0" max="100" placeholder="0.00" oninput="calculateEditSalePriceFromCommission()">
+                    <small class="form-help">Shop commission percentage (if applicable)</small>
+                </div>
+                <div class="form-group half-width">
+                    <label for="editSaleNotes">Notes</label>
+                    <input type="text" id="editSaleNotes" placeholder="Additional notes">
+                </div>
+                <div class="form-group full-width">
+                    <div id="editNetAmountInfo" class="net-amount-info" style="display: none;">
+                        <strong>Net Amount (after commission): $<span id="editNetAmount"></span></strong>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('editSaleModal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Update Sale</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="addPhotoModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('addPhotoModal')">&times;</span>
+            <h3>Add Photo to Gallery</h3>
+            <form id="addPhotoForm" class="modal-form" novalidate>
+                <div class="form-group full-width">
+                    <label for="photoTitle">Photo Title *</label>
+                    <input type="text" id="photoTitle" required maxlength="100" placeholder="e.g., Custom Embroidered T-Shirt">
+                </div>
+                <div class="form-group full-width">
+                    <label for="photoFile">Photo *</label>
+                    <div class="photo-input-container">
+                        <input type="file" id="photoFile" accept="image/*" required>
+                        <button type="button" class="btn btn-outline" onclick="openCameraForGallery()" title="Take Photo with Camera">
+                            <i class="fas fa-camera"></i> Take Photo
+                        </button>
+                    </div>
+                    <small>Upload a photo or take one with your camera.</small>
+                </div>
+                <div class="form-group full-width">
+                    <label for="photoDescription">Description</label>
+                    <textarea id="photoDescription" rows="3" maxlength="500" placeholder="Describe the work, techniques used, etc."></textarea>
+                </div>
+                <div class="form-group half-width">
+                    <label for="photoTags">Tags</label>
+                    <input type="text" id="photoTags" placeholder="e.g., t-shirt, custom, embroidery" maxlength="200">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('addPhotoModal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add Photo</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="editPhotoModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('editPhotoModal')">&times;</span>
+            <h3>Edit Photo</h3>
+            <form id="editPhotoForm" class="modal-form" novalidate>
+                <div class="form-group full-width">
+                    <label for="editPhotoTitle">Photo Title *</label>
+                    <input type="text" id="editPhotoTitle" required maxlength="100" placeholder="e.g., Custom T-Shirt Design">
+                </div>
+                <div class="form-group full-width">
+                    <label for="editPhotoDescription">Description</label>
+                    <textarea id="editPhotoDescription" rows="3" maxlength="500" placeholder="Describe the work, techniques used, etc."></textarea>
+                </div>
+                <div class="form-group full-width">
+                    <label for="editPhotoImage">Update Image (optional)</label>
+                    <div class="photo-input-container">
+                        <input type="file" id="editPhotoImage" accept="image/*">
+                        <button type="button" class="btn btn-outline" onclick="openCameraForEditPhoto()" title="Take Photo with Camera">
+                            <i class="fas fa-camera"></i> Take Photo
+                        </button>
+                    </div>
+                </div>
+                <div class="form-group full-width">
+                    <label for="editPhotoNotes">Notes</label>
+                    <textarea id="editPhotoNotes" rows="2" maxlength="300" placeholder="Additional notes about this photo"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('editPhotoModal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Update Photo</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="addIdeaModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('addIdeaModal')">&times;</span>
+            <h3>Add New Idea</h3>
+            <form id="addIdeaForm" class="modal-form" novalidate>
+                <div class="form-group full-width">
+                    <label for="ideaTitle">Idea Title *</label>
+                    <input type="text" id="ideaTitle" required maxlength="100" placeholder="e.g., Floral Hoop Design, Geometric Pattern">
+                </div>
+                <div class="form-group full-width">
+                    <label for="ideaDescription">Description</label>
+                    <textarea id="ideaDescription" rows="3" maxlength="500" placeholder="Describe the idea, inspiration, techniques, etc."></textarea>
+                </div>
+                <div class="form-group half-width">
+                    <label for="ideaStatus">Status</label>
+                    <select id="ideaStatus">
+                        <option value="new">New Idea</option>
+                        <option value="in-progress">In Progress</option>
+                        <option value="completed">Completed</option>
+                        <option value="archived">Archived</option>
+                    </select>
+                </div>
+                <div class="form-group full-width">
+                    <label for="ideaImage">Image</label>
+                    <div class="photo-input-container">
+                        <input type="file" id="ideaImage" accept="image/*">
+                        <button type="button" class="btn btn-outline" onclick="openCameraForIdeas()" title="Take Photo with Camera">
+                            <i class="fas fa-camera"></i> Take Photo
+                        </button>
+                    </div>
+                </div>
+                <div class="form-group half-width">
+                    <label for="ideaSource">Source</label>
+                    <input type="text" id="ideaSource" placeholder="e.g., Pinterest, Instagram, Etsy, Book Title" maxlength="100">
+                </div>
+                <div class="form-group half-width">
+                    <label for="ideaPriority">Priority</label>
+                    <select id="ideaPriority">
+                        <option value="low">Low</option>
+                        <option value="medium">Medium</option>
+                        <option value="high">High</option>
+                    </select>
+                </div>
+                <div class="form-group full-width">
+                    <label for="ideaNotes">Notes</label>
+                    <textarea id="ideaNotes" rows="2" placeholder="Additional notes, materials needed, estimated time, etc." maxlength="1000"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('addIdeaModal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add Idea</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Project Modal -->
+    <div id="editProjectModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('editProjectModal')">&times;</span>
+            <h3>Edit Project</h3>
+            <form id="editProjectForm" class="modal-form" novalidate>
+                <input type="hidden" id="editProjectIndex">
+                
+                <div class="form-group full-width">
+                    <label for="editProjectDescription">Description *</label>
+                    <input type="text" id="editProjectDescription" required placeholder="Project description">
+                </div>
+                
+                <!-- Projects don't need images - they're tracked through inventory, ideas, and gallery -->
+                
+                <div class="form-group half-width">
+                    <label for="editProjectQuantity">Quantity</label>
+                    <input type="number" id="editProjectQuantity" min="1" value="1" oninput="calculateEditTotalValue()">
+                </div>
+                
+                <div class="form-group half-width">
+                    <label for="editProjectPrice">Price Each</label>
+                    <input type="number" id="editProjectPrice" step="0.01" min="0" placeholder="0.00" oninput="calculateEditTotalValue()">
+                </div>
+                
+                <div class="form-group half-width">
+                    <label for="editProjectTotalPrice">Total Price</label>
+                    <input type="number" id="editProjectTotalPrice" step="0.01" min="0" readonly placeholder="0.00">
+                </div>
+                
+                <div class="form-group half-width">
+                    <label for="editProjectLocation">Location</label>
+                    <input type="text" id="editProjectLocation" placeholder="Storage location">
+                </div>
+                
+                
+                <div class="form-group half-width">
+                    <label for="editProjectCustomer">Customer</label>
+                    <div class="input-with-button">
+                        <select id="editProjectCustomer">
+                            <option value="">Select Customer (Optional)</option>
+                        </select>
+                        <button type="button" class="btn btn-outline btn-sm" onclick="openAddCustomerModal()" title="Add New Customer">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="form-group half-width">
+                    <label for="editProjectStatus">Status</label>
+                    <select id="editProjectStatus" onchange="updateEditStatusOptions()">
+                        <option value="pending">Pending</option>
+                        <option value="in-progress">In Progress</option>
+                        <option value="work-in-progress">Work in Progress</option>
+                        <option value="completed">Completed</option>
+                        <option value="sold">Sold</option>
+                    </select>
+                </div>
+                
+                <div class="form-group half-width">
+                    <label for="editProjectDueDate">Due Date</label>
+                    <input type="date" id="editProjectDueDate">
+                </div>
+                
+                <div class="form-group half-width">
+                    <label for="editProjectPriority">Priority</label>
+                    <select id="editProjectPriority">
+                        <option value="medium">Medium</option>
+                        <option value="high">High</option>
+                        <option value="low">Low</option>
+                    </select>
+                </div>
+                
+                <div class="form-group half-width">
+                    <label for="editProjectTags">Tags (comma-separated)</label>
+                    <input type="text" id="editProjectTags" placeholder="e.g., wedding, baby, holiday">
+                </div>
+                
+                <div class="form-group full-width">
+                    <label for="editProjectPatternLink">Pattern Link (Google Drive)</label>
+                    <input type="url" id="editProjectPatternLink" placeholder="https://drive.google.com/file/d/...">
+                    <small class="form-help">Paste your Google Drive shareable link here</small>
+                </div>
+                
+                <div class="form-group full-width">
+                    <label for="editProjectNotes">Notes</label>
+                    <input type="text" id="editProjectNotes" placeholder="Color, size, special instructions, etc.">
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('editProjectModal')">Cancel</button>
+                    <button type="button" class="btn btn-info" onclick="copyCurrentProject()" title="Create a copy of this project">
+                        <i class="fas fa-copy"></i> Copy Project
+                    </button>
+                    <button type="submit" class="btn btn-primary">Update Project</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Completed Item Modal -->
+    <div id="editCompletedItemModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('editCompletedItemModal')">&times;</span>
+            <h3>Edit Completed Item</h3>
+            <form id="editCompletedItemForm" class="modal-form" novalidate>
+                <input type="hidden" id="editCompletedItemIndex">
+                
+                <div class="form-group full-width">
+                    <label for="editCompletedItemDescription">Description *</label>
+                    <input type="text" id="editCompletedItemDescription" required placeholder="Item description">
+                </div>
+                
+                <div class="form-group half-width">
+                    <label for="editCompletedItemQuantity">Quantity</label>
+                    <input type="number" id="editCompletedItemQuantity" min="1" value="1" oninput="calculateCompletedItemTotal()">
+                </div>
+                
+                <div class="form-group half-width">
+                    <label for="editCompletedItemPrice">Price Each</label>
+                    <input type="number" id="editCompletedItemPrice" step="0.01" min="0" placeholder="0.00" oninput="calculateCompletedItemTotal()">
+                </div>
+                
+                <div class="form-group half-width">
+                    <label for="editCompletedItemTotal">Total Price</label>
+                    <input type="number" id="editCompletedItemTotal" step="0.01" min="0" readonly placeholder="0.00">
+                </div>
+                
+                <div class="form-group half-width">
+                    <label for="editCompletedItemCustomer">Customer</label>
+                    <div class="input-with-button">
+                        <select id="editCompletedItemCustomer">
+                            <option value="">Select Customer (Optional)</option>
+                        </select>
+                        <button type="button" class="btn btn-outline btn-sm" onclick="openAddCustomerModal()" title="Add New Customer">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="form-group half-width">
+                    <label for="editCompletedItemInvoicedDate">Date Invoiced</label>
+                    <input type="date" id="editCompletedItemInvoicedDate">
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('editCompletedItemModal')">Cancel</button>
+                    <button type="button" class="btn btn-info" onclick="copyCurrentCompletedItem()" title="Create a copy of this item">
+                        <i class="fas fa-copy"></i> Copy Item
+                    </button>
+                    <button type="submit" class="btn btn-primary">Update Item</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Completed Item Modal -->
+    <div id="addCompletedItemModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('addCompletedItemModal')">&times;</span>
+            <h3>Add Completed Item</h3>
+            <form id="addCompletedItemForm" class="modal-form" novalidate>
+                
+                <div class="form-group full-width">
+                    <label for="addCompletedItemDescription">Description *</label>
+                    <input type="text" id="addCompletedItemDescription" required placeholder="Item description">
+                </div>
+                
+                <div class="form-group half-width">
+                    <label for="addCompletedItemQuantity">Quantity</label>
+                    <input type="number" id="addCompletedItemQuantity" min="1" value="1" oninput="calculateAddCompletedItemTotal()">
+                </div>
+                
+                <div class="form-group half-width">
+                    <label for="addCompletedItemPrice">Price Each</label>
+                    <input type="number" id="addCompletedItemPrice" step="0.01" min="0" placeholder="0.00" oninput="calculateAddCompletedItemTotal()">
+                </div>
+                
+                <div class="form-group half-width">
+                    <label for="addCompletedItemTotal">Total Price</label>
+                    <input type="number" id="addCompletedItemTotal" step="0.01" min="0" readonly placeholder="0.00">
+                </div>
+                
+                <div class="form-group half-width">
+                    <label for="addCompletedItemCustomer">Customer</label>
+                    <div class="input-with-button">
+                        <select id="addCompletedItemCustomer">
+                            <option value="">Select Customer (Optional)</option>
+                        </select>
+                        <button type="button" class="btn btn-outline btn-sm" onclick="openAddCustomerModal()" title="Add New Customer">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="form-group half-width">
+                    <label for="addCompletedItemInvoicedDate">Date Invoiced</label>
+                    <input type="date" id="addCompletedItemInvoicedDate">
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('addCompletedItemModal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add Completed Item</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Inventory Modal -->
+    <div id="editInventoryModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('editInventoryModal')">&times;</span>
+            <h3>Edit Inventory Item</h3>
+            <form id="editInventoryForm" class="modal-form" novalidate>
+                <input type="hidden" id="editInventoryIndex">
+                
+                <div class="form-group full-width">
+                    <label for="editInventoryDescription">Description *</label>
+                    <input type="text" id="editInventoryDescription" required placeholder="e.g., 4-inch Hoop, Embroidery Thread - Red">
+                </div>
+                
+                <div class="form-group half-width">
+                    <label for="editInventoryQuantity">Quantity</label>
+                    <input type="number" id="editInventoryQuantity" min="1" value="1" onchange="calculateEditInventoryTotalValue()">
+                </div>
+                
+                <div class="form-group half-width">
+                    <label for="editInventoryPrice">Cost (per item)</label>
+                    <input type="number" id="editInventoryPrice" step="0.01" min="0" placeholder="0.00" onchange="calculateEditInventoryTotalValue()">
+                </div>
+                
+                <div class="form-group half-width">
+                    <label for="editInventoryTotalPrice">Total Value</label>
+                    <input type="number" id="editInventoryTotalPrice" step="0.01" min="0" readonly>
+                </div>
+                
+                <div class="form-group half-width">
+                    <label for="editInventorySupplier">Supplier</label>
+                    <input type="text" id="editInventorySupplier" placeholder="e.g., Joann's, Amazon">
+                </div>
+                
+                <div class="form-group half-width">
+                    <label for="editInventoryReorderPoint">Reorder Point</label>
+                    <input type="number" id="editInventoryReorderPoint" min="0" placeholder="Minimum quantity">
+                </div>
+                
+                <div class="form-group half-width">
+                    <label for="editInventoryStatus">Status</label>
+                    <select id="editInventoryStatus">
+                        <option value="available">Available</option>
+                        <option value="low-stock">Low Stock</option>
+                        <option value="out-of-stock">Out of Stock</option>
+                        <option value="ordered">Ordered</option>
+                    </select>
+                </div>
+                
+                <div class="form-group full-width">
+                    <label for="editInventoryNotes">Notes</label>
+                    <input type="text" id="editInventoryNotes" placeholder="Color, size, special notes, etc.">
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('editInventoryModal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Update Inventory Item</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Invoice Generation Modal -->
+    <div id="invoiceModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('invoiceModal')">&times;</span>
+            <h2><i class="fas fa-file-invoice"></i> Generate Invoice</h2>
+            <form id="invoiceForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="invoiceCustomer">Customer:</label>
+                        <select id="invoiceCustomer" name="invoiceCustomer" required>
+                            <option value="">Select Customer</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="invoiceDate">Invoice Date:</label>
+                        <input type="date" id="invoiceDate" name="invoiceDate" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="invoiceNotes">Notes:</label>
+                    <textarea id="invoiceNotes" name="invoiceNotes" rows="3" placeholder="Additional notes for the invoice..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Select Sales to Include:</label>
+                    <div id="salesSelection" class="sales-selection">
+                        <!-- Sales will be loaded here -->
+                    </div>
+                </div>
+                <div class="form-row">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-file-invoice"></i> Generate Invoice
+                    </button>
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('invoiceModal')">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Invoice Preview Modal -->
+    <div id="invoicePreviewModal" class="modal">
+        <div class="modal-content invoice-preview">
+            <div class="invoice-header">
+                <button class="btn" onclick="printInvoice()" style="background: #000; color: white; border: 1px solid #000;">
+                    <i class="fas fa-print"></i> Print Invoice
+                </button>
+                <button class="btn" onclick="closeModal('invoicePreviewModal')" style="background: #666; color: white; border: 1px solid #666;">
+                    <i class="fas fa-times"></i> Close
+                </button>
+            </div>
+            <div id="invoiceContent" class="invoice-content">
+                <!-- Invoice content will be generated here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Invoices List Modal -->
+    <div id="invoicesListModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('invoicesListModal')">&times;</span>
+            <h2><i class="fas fa-list"></i> Invoices</h2>
+            <div class="table-container">
+                <table id="invoicesTable">
+                    <thead>
+                        <tr>
+                            <th>Invoice #</th>
+                            <th>Customer</th>
+                            <th>Date</th>
+                            <th>Total</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="invoicesTableBody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Camera Modal -->
+    <div id="cameraModal" class="modal">
+        <div class="modal-content camera-modal">
+            <span class="close" onclick="closeCameraModal()">&times;</span>
+            <h3><i class="fas fa-camera"></i> Take Photo</h3>
+            <div class="camera-container">
+                <video id="cameraVideo" autoplay playsinline></video>
+                <canvas id="cameraCanvas" style="display: none;"></canvas>
+                <div class="camera-controls">
+                    <button type="button" class="btn btn-primary" id="captureBtn" onclick="capturePhoto()">
+                        <i class="fas fa-camera"></i> Capture
+                    </button>
+                    <button type="button" class="btn btn-secondary" id="retakeBtn" onclick="retakePhoto()" style="display: none;">
+                        <i class="fas fa-redo"></i> Retake
+                    </button>
+                    <button type="button" class="btn btn-success" id="usePhotoBtn" onclick="useCapturedPhoto()" style="display: none;">
+                        <i class="fas fa-check"></i> Use Photo
+                    </button>
+                </div>
+                <div id="cameraError" class="error-message" style="display: none;">
+                    <i class="fas fa-exclamation-triangle"></i> Camera not available. Please use file upload instead.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Photo View Modal -->
+    <div id="photoViewModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('photoViewModal')">&times;</span>
+            <h3><i class="fas fa-image"></i> Photo</h3>
+            <div class="photo-container">
+                <img id="photoFullImage" class="photo-full" src="" alt="Photo">
+                <div class="photo-actions">
+                    <button type="button" class="btn btn-danger" onclick="deletePhoto()">
+                        <i class="fas fa-trash"></i> Delete Photo
+                    </button>
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('photoViewModal')">
+                        <i class="fas fa-times"></i> Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Confirmation Modal -->
+    <div id="confirmModal" class="modal">
+        <div class="modal-content confirm-modal">
+            <div class="confirm-header">
+                <h3 id="confirmTitle">Confirm Action</h3>
+            </div>
+            <div class="confirm-body">
+                <p id="confirmMessage">Are you sure you want to proceed?</p>
+            </div>
+            <div class="confirm-actions">
+                <button class="btn btn-secondary" onclick="cancelConfirm()">Cancel</button>
+                <button class="btn btn-danger" onclick="confirmAction()">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Advanced Search Modal -->
+    <div id="advancedSearchModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('advancedSearchModal')">&times;</span>
+            <h3><i class="fas fa-search-plus"></i> Advanced Search</h3>
+            <form id="advancedSearchForm" class="modal-form">
+                <div class="search-criteria">
+                    <div class="form-group full-width">
+                        <label for="advancedSearchText">Search Text</label>
+                        <input type="text" id="advancedSearchText" placeholder="Enter search terms...">
+                        <small>Search in description, notes, customer name, and tags</small>
+                    </div>
+                    
+                    <div class="form-group half-width">
+                        <label for="advancedStatus">Status</label>
+                        <select id="advancedStatus" multiple>
+                            <option value="pending">Pending</option>
+                            <option value="in-progress">In Progress</option>
+                            <option value="work-in-progress">Work in Progress</option>
+                            <option value="completed">Completed</option>
+                            <option value="sold">Sold</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group half-width">
+                        <label for="advancedPriority">Priority</label>
+                        <select id="advancedPriority" multiple>
+                            <option value="high">High</option>
+                            <option value="medium">Medium</option>
+                            <option value="low">Low</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group half-width">
+                        <label for="advancedCustomer">Customer</label>
+                        <select id="advancedCustomer" multiple>
+                            <!-- Populated dynamically -->
+                        </select>
+                    </div>
+                    
+                    <div class="form-group half-width">
+                        <label for="advancedLocation">Location</label>
+                        <select id="advancedLocation" multiple>
+                            <!-- Populated dynamically -->
+                        </select>
+                    </div>
+                    
+                    <div class="form-group half-width">
+                        <label for="advancedDateFrom">Date From</label>
+                        <input type="date" id="advancedDateFrom">
+                    </div>
+                    
+                    <div class="form-group half-width">
+                        <label for="advancedDateTo">Date To</label>
+                        <input type="date" id="advancedDateTo">
+                    </div>
+                    
+                    <div class="form-group half-width">
+                        <label for="advancedPriceMin">Min Price</label>
+                        <input type="number" id="advancedPriceMin" step="0.01" min="0">
+                    </div>
+                    
+                    <div class="form-group half-width">
+                        <label for="advancedPriceMax">Max Price</label>
+                        <input type="number" id="advancedPriceMax" step="0.01" min="0">
+                    </div>
+                    
+                    <div class="form-group full-width">
+                        <label for="advancedTags">Tags (comma-separated)</label>
+                        <input type="text" id="advancedTags" placeholder="wedding, baby, holiday">
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('advancedSearchModal')">Cancel</button>
+                    <button type="button" class="btn btn-outline" onclick="clearAdvancedSearch()">Clear</button>
+                    <button type="button" class="btn btn-info" onclick="saveAdvancedSearch()">Save Search</button>
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Saved Searches Modal -->
+    <div id="savedSearchesModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('savedSearchesModal')">&times;</span>
+            <h3><i class="fas fa-history"></i> Saved Searches</h3>
+            <div id="savedSearchesList" class="saved-searches-list">
+                <!-- Populated dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Print Invoice Modal -->
+    <div id="printInvoiceModal" class="modal">
+        <div class="modal-content print-invoice-modal">
+            <span class="close" onclick="closeModal('printInvoiceModal')">&times;</span>
+            <h3><i class="fas fa-print"></i> Print Invoice</h3>
+            
+            <form id="printInvoiceForm" class="modal-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="printVendorName">Vendor Name *</label>
+                        <input type="text" id="printVendorName" name="vendorName" required 
+                               placeholder="e.g., First Avenue Shop">
+                    </div>
+                    <div class="form-group">
+                        <label for="printInvoiceDate">Date *</label>
+                        <input type="date" id="printInvoiceDate" name="invoiceDate" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="printVendorLogo">Vendor Logo URL (optional)</label>
+                    <input type="url" id="printVendorLogo" name="vendorLogo" 
+                           placeholder="https://example.com/logo.png">
+                </div>
+                
+                <div class="form-group">
+                    <label>Invoice Items *</label>
+                    <div id="printInvoiceItems" class="invoice-items-container">
+                        <div class="invoice-item-row">
+                            <input type="text" name="itemDescription[]" placeholder="Item description" required>
+                            <input type="number" name="itemQuantity[]" placeholder="Qty" min="1" value="1" required>
+                            <input type="number" name="itemCost[]" placeholder="Cost" min="0" step="0.01" required>
+                            <button type="button" class="btn btn-sm btn-outline" onclick="removeInvoiceItem(this)">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-outline btn-sm" onclick="addInvoiceItem()">
+                        <i class="fas fa-plus"></i> Add Item
+                    </button>
+                </div>
+                
+                <div class="form-group">
+                    <label for="printNotes">Notes (optional)</label>
+                    <textarea id="printNotes" name="notes" rows="3" 
+                              placeholder="Additional notes for the vendor..."></textarea>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn btn-outline" onclick="closeModal('printInvoiceModal')">
+                        Cancel
+                    </button>
+                    <button type="button" class="btn btn-primary" onclick="previewPrintInvoice()">
+                        <i class="fas fa-eye"></i> Preview
+                    </button>
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-print"></i> Print Invoice
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // NUCLEAR CACHE BUSTING - Force reload of CSS and JS on every page load
+        (function() {
+            const timestamp = Date.now();
+            const random = Math.random().toString(36).substring(7);
+            
+            // Update page title with timestamp
+            document.title = 'CyndyP StitchCraft Inventory - v1.0.97 - ' + timestamp + ' - FORCE RELOAD';
+            
+            // Force reload CSS with cache bypass
+            const cssLink = document.getElementById('css-cache-bust');
+            if (cssLink) {
+                const newCssHref = cssLink.href + timestamp + '&rand=' + random + '&nocache=1';
+                cssLink.href = newCssHref;
+                console.log('💥 CSS RELOADED:', newCssHref);
+            }
+            
+            // Force reload JS with cache bypass
+            const jsLink = document.getElementById('js-cache-bust');
+            if (jsLink) {
+                const newJsSrc = jsLink.src + timestamp + '&rand=' + random + '&nocache=1';
+                jsLink.src = newJsSrc;
+                console.log('💥 JS RELOADED:', newJsSrc);
+            }
+            
+            // Force clear any caches
+            if ('caches' in window) {
+                caches.keys().then(function(names) {
+                    for (let name of names) {
+                        caches.delete(name);
+                        console.log('🗑️ Cache deleted:', name);
+                    }
+                });
+            }
+            
+            // Clear service worker cache (mobile fix)
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.getRegistrations().then(function(registrations) {
+                    for (let registration of registrations) {
+                        registration.unregister();
+                        console.log('🗑️ Service worker unregistered');
+                    }
+                });
+            }
+            
+            // Force reload if version doesn't match
+            setTimeout(() => {
+                if (typeof appVersion !== 'undefined' && appVersion !== '1.0.97') {
+                    console.log('🔄 Version mismatch detected, forcing reload...');
+                    window.location.reload(true);
+                }
+            }, 1000);
+            
+            // Force reload page if cache issues persist (mobile nuclear option)
+            if (window.location.search.indexOf('force=reload') === -1) {
+                setTimeout(() => {
+                    // Check if we're on mobile and force reload
+                    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+                        console.log('📱 Mobile detected - forcing reload to clear cache');
+                        window.location.href = window.location.href + '?force=reload&t=' + Date.now();
+                    }
+                }, 2000);
+            }
+            
+            console.log('💥 NUCLEAR CACHE BUST COMPLETE:', timestamp, random, 'Version: 1.0.97 - IMMEDIATE MOBILE RELOAD');
+        })();
+    </script>
+    <script src="script.js?v=1.0.97&t=202510122240&cb=8&r=immediate&force=clear&mobile=reload&bust=nuclear&now=yes" id="js-cache-bust"></script>
+</body>
+</html>

@@ -1,0 +1,33 @@
+{
+  "name": "CyndyP StitchCraft Inventory",
+  "short_name": "StitchCraft",
+  "description": "Embroidery inventory and project management system",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#2C5F7C",
+  "theme_color": "#2C5F7C",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["productivity", "business"],
+  "screenshots": [
+    {
+      "src": "logo.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide"
+    }
+  ]
+}
