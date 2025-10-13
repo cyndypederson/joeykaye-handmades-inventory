@@ -1,0 +1,62 @@
+🚀 DEPLOY JOEYKAYE HANDMADES TO VERCEL
+=====================================
+
+STEP 1: Go to Vercel
+--------------------
+Open: https://vercel.com/new
+
+STEP 2: Sign in
+---------------
+Sign in with GitHub (if not already)
+
+STEP 3: Import Repository
+--------------------------
+- Click "Import Git Repository"
+- Search for: cyndypederson/joeykaye-handmades-inventory
+- Click "Import"
+
+STEP 4: Configure Project
+--------------------------
+- Project Name: joeykaye-handmades-inventory
+- Framework Preset: Other (or auto-detect)
+- Root Directory: ./
+- Build Command: (leave default)
+- Output Directory: (leave default)
+
+STEP 5: Add Environment Variables ⚠️ CRITICAL!
+------------------------------------------------
+Click "Environment Variables" and add ALL 5 of these:
+
+1. MONGODB_URI
+   mongodb+srv://cyndypstitchcraft_db_user:4G2vcEQSjAvJoUxY@embroider-inventory.2x57teq.mongodb.net/?retryWrites=true&w=majority&appName=embroider-inventory
+
+2. ADMIN_USERNAME
+   admin
+
+3. ADMIN_PASSWORD
+   password2025
+
+4. SESSION_SECRET
+   joeykaye-secret-key-2025
+
+5. NODE_ENV
+   production
+
+STEP 6: Deploy
+--------------
+- Click "Deploy"
+- Wait 1-2 minutes
+
+STEP 7: Access Your Live Site
+------------------------------
+Your site will be at:
+https://joeykaye-handmades-inventory.vercel.app
+
+Login credentials:
+- Username: admin
+- Password: password2025
+
+=====================================
+NOTE: The database will be completely empty (no old CyndyP data).
+You'll start fresh with JoeyKaye Handmades!
+

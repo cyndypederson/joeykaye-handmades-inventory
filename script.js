@@ -4273,8 +4273,8 @@ function showInvoicePreview(invoice) {
     
     // Store the invoice data for printing
     currentInvoiceData = {
-        businessName: "CyndyP Stitchcraft",
-        businessEmail: "cyndypstitchcraft@gmail.com",
+        businessName: "JoeyKaye Handmades",
+        businessEmail: "contact@joeykayehandmades.com",
         invoiceTitle: "INVOICE",
         id: invoice.id,
         date: invoice.date,
@@ -4287,8 +4287,8 @@ function showInvoicePreview(invoice) {
 }
 
 function generateInvoiceHTML(invoice) {
-    const businessName = "CyndyP Stitchcraft";
-    const businessEmail = "cyndypstitchcraft@gmail.com";
+    const businessName = "JoeyKaye Handmades";
+    const businessEmail = "contact@joeykayehandmades.com";
     
     // Debug: Check for duplicate sales items
     console.log('Invoice sales items:', invoice.sales);
@@ -4529,8 +4529,8 @@ function extractInvoiceDataFromModal() {
         if (!invoiceContent) return null;
         
         // Extract business info
-        const businessName = invoiceContent.querySelector('.business-info h1')?.textContent || 'CyndyP Stitchcraft';
-        const businessEmail = invoiceContent.querySelector('.business-info p')?.textContent?.replace('Email: ', '') || 'cyndypstitchcraft@gmail.com';
+        const businessName = invoiceContent.querySelector('.business-info h1')?.textContent || 'JoeyKaye Handmades';
+        const businessEmail = invoiceContent.querySelector('.business-info p')?.textContent?.replace('Email: ', '') || 'contact@joeykayehandmades.com';
         
         // Extract invoice info
         const invoiceTitle = invoiceContent.querySelector('.invoice-info h2')?.textContent || 'INVOICE';
@@ -8569,7 +8569,7 @@ function generatePrintInvoicePreview(vendorName, invoiceDate, items, vendorLogo,
     const previewHTML = `
         <div class="print-invoice-header">
             <div>
-                <h1 class="print-invoice-title">CyndyP Stitchcraft</h1>
+                <h1 class="print-invoice-title">JoeyKaye Handmades</h1>
                 <p class="print-invoice-date">Invoice Date: ${new Date(invoiceDate).toLocaleDateString()}</p>
             </div>
             <div class="print-vendor-info">
@@ -8615,7 +8615,7 @@ function generatePrintInvoicePreview(vendorName, invoiceDate, items, vendorLogo,
         <div class="print-invoice-signature">
             <div>
                 <div class="print-signature-line"></div>
-                <div class="print-signature-label">CyndyP Stitchcraft Signature</div>
+                <div class="print-signature-label">JoeyKaye Handmades Signature</div>
             </div>
             <div>
                 <div class="print-signature-line"></div>
@@ -10097,7 +10097,7 @@ function generateTestReport() {
     
     reportContent.innerHTML = `
         <div class="report-header">
-            <h2>📊 CyndyP Stitchcraft - Business Report</h2>
+            <h2>📊 JoeyKaye Handmades - Business Report</h2>
             <p class="report-date">Generated on: ${new Date().toLocaleDateString()}</p>
         </div>
         
@@ -10676,7 +10676,7 @@ function printCurrentReport() {
             <!DOCTYPE html>
             <html>
                 <head>
-                    <title>CyndyP Stitchcraft - Inventory Report</title>
+                    <title>JoeyKaye Handmades - Inventory Report</title>
                     <meta charset="UTF-8">
                     <style>
                         body { 
@@ -12573,7 +12573,7 @@ function showInstallPrompt() {
     installBanner.innerHTML = `
         <div class="install-banner-content">
             <i class="fas fa-mobile-alt"></i>
-            <span>Install StitchCraft for easy access</span>
+            <span>Install JoeyKaye Handmades for easy access</span>
             <button class="btn btn-primary btn-sm" onclick="installPWA()">Install</button>
             <button class="btn btn-secondary btn-sm" onclick="dismissInstallBanner()">×</button>
         </div>
@@ -13762,8 +13762,8 @@ function generateInvoiceForItems(items, customer) {
     
     // Store current invoice data for printing
     currentInvoiceData = {
-        businessName: "CyndyP Stitchcraft",
-        businessEmail: "cyndypstitchcraft@gmail.com",
+        businessName: "JoeyKaye Handmades",
+        businessEmail: "contact@joeykayehandmades.com",
         invoiceTitle: "INVOICE",
         id: invoice.id,
         date: new Date(invoice.date).toLocaleDateString(),

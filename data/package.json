@@ -1,7 +1,7 @@
 {
-  "name": "embroidery-inventory-manager",
+  "name": "joeykaye-handmades-inventory",
   "version": "1.0.27",
-  "description": "A web-based inventory management system for embroidery businesses",
+  "description": "A web-based inventory management system for handmade craft businesses",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -9,11 +9,11 @@
     "deploy": "./deploy.sh",
     "version:bump": "node version-manager.js",
     "pm2:start": "pm2 start ecosystem.config.js",
-    "pm2:stop": "pm2 stop embroidery-inventory",
-    "pm2:restart": "pm2 restart embroidery-inventory",
-    "pm2:delete": "pm2 delete embroidery-inventory",
+    "pm2:stop": "pm2 stop joeykaye-inventory",
+    "pm2:restart": "pm2 restart joeykaye-inventory",
+    "pm2:delete": "pm2 delete joeykaye-inventory",
     "pm2:status": "pm2 status",
-    "pm2:logs": "pm2 logs embroidery-inventory",
+    "pm2:logs": "pm2 logs joeykaye-inventory",
     "test": "node test-smoke.js",
     "test:smoke": "node test-smoke.js",
     "test:modals": "node test-modal-separation.js",
@@ -24,7 +24,8 @@
     "deploy:safe": "npm run pre-deploy && npm run deploy"
   },
   "keywords": [
-    "embroidery",
+    "handmade",
+    "crafts",
     "inventory",
     "management",
     "local"
