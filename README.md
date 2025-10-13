@@ -24,10 +24,12 @@ A web-based inventory management system specifically designed for Joey Kaye Hand
    ```
    MONGODB_URI=your_mongodb_connection_string
    ADMIN_USERNAME=admin
-   ADMIN_PASSWORD=your_password
+   ADMIN_PASSWORD=password2025
    SESSION_SECRET=your_secret_key
    PORT=3003
    ```
+   
+   Note: Default password is `password2025` if not specified in .env
 
 3. Start the server:
    ```bash
