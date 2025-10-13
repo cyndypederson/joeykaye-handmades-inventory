@@ -178,7 +178,7 @@ app.get('/health', async (req, res) => {
 // Authentication endpoints
 // Default admin credentials (should be changed in production)
 const ADMIN_USERNAME = process.env.ADMIN_USERNAME || 'admin';
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'Kobedavis#1';
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'password2025';
 
 // Check auth status
 app.get('/api/auth/status', (req, res) => {
