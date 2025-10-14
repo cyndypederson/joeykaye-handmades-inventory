@@ -10,7 +10,7 @@ const app = express();
 const PORT = process.env.PORT || 3003;
 
 // MongoDB connection
-const MONGODB_URI = process.env.MONGODB_URI || 'MONGODB_URI_REQUIRED';
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://cyndypstitchcraft_db_user:4G2vcEQSjAvJoUxY@embroider-inventory.2x57teq.mongodb.net/?retryWrites=true&w=majority&appName=embroider-inventory';
 const DB_NAME = 'joeykaye_handmades';
 let db;
 
@@ -53,42 +53,26 @@ async function initializeCollections() {
             
             if (fs.existsSync(inventoryPath)) {
                 const inventoryData = JSON.parse(fs.readFileSync(inventoryPath, 'utf8'));
-                if (inventoryData && inventoryData.length > 0) {
-                    await db.collection('inventory').insertMany(inventoryData);
-                    console.log('📦 Loaded inventory sample data');
-                } else {
-                    console.log('📦 Inventory data file is empty, skipping');
-                }
+                await db.collection('inventory').insertMany(inventoryData);
+                console.log('📦 Loaded inventory sample data');
             }
             
             if (fs.existsSync(customersPath)) {
                 const customersData = JSON.parse(fs.readFileSync(customersPath, 'utf8'));
-                if (customersData && customersData.length > 0) {
-                    await db.collection('customers').insertMany(customersData);
-                    console.log('👥 Loaded customers sample data');
-                } else {
-                    console.log('👥 Customers data file is empty, skipping');
-                }
+                await db.collection('customers').insertMany(customersData);
+                console.log('👥 Loaded customers sample data');
             }
             
             if (fs.existsSync(salesPath)) {
                 const salesData = JSON.parse(fs.readFileSync(salesPath, 'utf8'));
-                if (salesData && salesData.length > 0) {
-                    await db.collection('sales').insertMany(salesData);
-                    console.log('💰 Loaded sales sample data');
-                } else {
-                    console.log('💰 Sales data file is empty, skipping');
-                }
+                await db.collection('sales').insertMany(salesData);
+                console.log('💰 Loaded sales sample data');
             }
             
             if (fs.existsSync(galleryPath)) {
                 const galleryData = JSON.parse(fs.readFileSync(galleryPath, 'utf8'));
-                if (galleryData && galleryData.length > 0) {
-                    await db.collection('gallery').insertMany(galleryData);
-                    console.log('🖼️ Loaded gallery sample data');
-                } else {
-                    console.log('🖼️ Gallery data file is empty, skipping');
-                }
+                await db.collection('gallery').insertMany(galleryData);
+                console.log('🖼️ Loaded gallery sample data');
             }
             
             // Initialize ideas collection (empty by default)
