@@ -1,6 +1,6 @@
 {
   "name": "joeykaye-handmades-inventory",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "A web-based inventory management system for Joey Kaye Handmades",
   "main": "server.js",
   "scripts": {

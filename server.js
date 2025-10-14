@@ -1,4 +1,4 @@
-const express = require('express');
+const express = require('express'); // v1.1.1 - Force rebuild to fix MongoDB 500 errors
 const cors = require('cors');
 const path = require('path');
 const { MongoClient, ObjectId } = require('mongodb');
