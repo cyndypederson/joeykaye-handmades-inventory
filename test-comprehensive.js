@@ -51,18 +51,25 @@ async function waitForElement(page, selector, timeout = 5000) {
 }
 
 /**
+ * Sleep helper function
+ */
+async function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+/**
  * Test 1: Complete inventory workflow
  */
 async function testInventoryWorkflow(page) {
     try {
         await page.click('[data-tab="inventory"]');
-        await page.waitFor(500);
+        await sleep(500);
         
         // Test adding inventory item
         const addButton = await page.$('button[onclick*="openAddInventoryModal"]');
         if (addButton) {
             await addButton.click();
-            await page.waitFor(500);
+            await sleep(500);
             
             // Fill out form
             await page.type('#inventoryDescription', 'Test Yarn - Green');
@@ -73,7 +80,7 @@ async function testInventoryWorkflow(page) {
             const submitButton = await page.$('#addInventoryForm button[type="submit"]');
             if (submitButton) {
                 await submitButton.click();
-                await page.waitFor(1000);
+                await sleep(1000);
                 
                 // Check if item was added (look for success message or new item in grid)
                 const success = await page.evaluate(() => {
@@ -108,13 +115,13 @@ async function testInventoryWorkflow(page) {
 async function testCustomerWorkflow(page) {
     try {
         await page.click('[data-tab="customers"]');
-        await page.waitFor(500);
+        await sleep(500);
         
         // Test adding customer
         const addButton = await page.$('button[onclick*="openAddCustomerModal"]');
         if (addButton) {
             await addButton.click();
-            await page.waitFor(500);
+            await sleep(500);
             
             // Fill out customer form
             await page.type('#customerName', 'Test Customer');
@@ -125,7 +132,7 @@ async function testCustomerWorkflow(page) {
             const submitButton = await page.$('#addCustomerForm button[type="submit"]');
             if (submitButton) {
                 await submitButton.click();
-                await page.waitFor(1000);
+                await sleep(1000);
                 
                 // Check if customer was added
                 const success = await page.evaluate(() => {
@@ -159,13 +166,13 @@ async function testCustomerWorkflow(page) {
 async function testProjectWorkflow(page) {
     try {
         await page.click('[data-tab="wip"]');
-        await page.waitFor(500);
+        await sleep(500);
         
         // Test adding project
         const addButton = await page.$('button[onclick*="openAddProjectModal"]');
         if (addButton) {
             await addButton.click();
-            await page.waitFor(500);
+            await sleep(500);
             
             // Fill out project form
             await page.type('#projectDescription', 'Test Project - Green Scarf');
@@ -177,7 +184,7 @@ async function testProjectWorkflow(page) {
             const submitButton = await page.$('#addProjectForm button[type="submit"]');
             if (submitButton) {
                 await submitButton.click();
-                await page.waitFor(1000);
+                await sleep(1000);
                 
                 // Check if project was added
                 const success = await page.evaluate(() => {
@@ -211,13 +218,13 @@ async function testProjectWorkflow(page) {
 async function testSearchFunctionality(page) {
     try {
         await page.click('[data-tab="inventory"]');
-        await page.waitFor(500);
+        await sleep(500);
         
         // Test search input
         const searchInput = await page.$('#inventorySearch, #searchItems');
         if (searchInput) {
             await searchInput.type('Test');
-            await page.waitFor(500);
+            await sleep(500);
             
             // Check if search results are filtered
             const hasResults = await page.evaluate(() => {
@@ -230,7 +237,7 @@ async function testSearchFunctionality(page) {
             // Clear search
             await searchInput.click({ clickCount: 3 });
             await searchInput.press('Delete');
-            await page.waitFor(300);
+            await sleep(300);
             
             return hasResults;
         }
@@ -249,13 +256,13 @@ async function testSearchFunctionality(page) {
 async function testFilterFunctionality(page) {
     try {
         await page.click('[data-tab="wip"]');
-        await page.waitFor(500);
+        await sleep(500);
         
         // Test status filter
         const statusFilter = await page.$('#wipStatusFilter, select[onchange*="filterWIP"]');
         if (statusFilter) {
             await statusFilter.select('in-progress');
-            await page.waitFor(500);
+            await sleep(500);
             
             // Check if results are filtered
             const hasFilteredResults = await page.evaluate(() => {
@@ -267,7 +274,7 @@ async function testFilterFunctionality(page) {
             
             // Reset filter
             await statusFilter.select('');
-            await page.waitFor(300);
+            await sleep(300);
             
             return hasFilteredResults;
         }
@@ -290,7 +297,7 @@ async function testDataPersistence(page) {
         
         for (const tab of tabs) {
             await page.click(`[data-tab="${tab}"]`);
-            await page.waitFor(1000);
+            await sleep(1000);
             
             // Check if data is loaded
             const hasData = await page.evaluate((tabName) => {
@@ -329,7 +336,7 @@ async function testMobileResponsiveness(page) {
         
         for (const viewport of viewports) {
             await page.setViewport(viewport);
-            await page.waitFor(500);
+            await sleep(500);
             
             // Check if mobile elements are present
             const hasMobileElements = await page.evaluate(() => {
@@ -363,18 +370,18 @@ async function testErrorHandling(page) {
     try {
         // Test form validation errors
         await page.click('[data-tab="inventory"]');
-        await page.waitFor(500);
+        await sleep(500);
         
         const addButton = await page.$('button[onclick*="openAddInventoryModal"]');
         if (addButton) {
             await addButton.click();
-            await page.waitFor(500);
+            await sleep(500);
             
             // Try to submit empty form
             const submitButton = await page.$('#addInventoryForm button[type="submit"]');
             if (submitButton) {
                 await submitButton.click();
-                await page.waitFor(500);
+                await sleep(500);
                 
                 // Check if validation error is shown
                 const hasValidationError = await page.evaluate(() => {
@@ -396,7 +403,7 @@ async function testErrorHandling(page) {
                 const closeButton = await page.$('#addInventoryModal .close');
                 if (closeButton) {
                     await closeButton.click();
-                    await page.waitFor(300);
+                    await sleep(300);
                 }
                 
                 return hasValidationError;
@@ -433,8 +440,8 @@ async function runTests() {
         await page.setViewport(TEST_CONFIG.viewport);
         
         // Navigate to the app
-        await page.goto(TEST_CONFIG.baseUrl, { waitUntil: 'networkidle0' });
-        await page.waitFor(3000); // Give extra time for data to load
+        await page.goto(TEST_CONFIG.baseUrl, { waitUntil: 'domcontentloaded', timeout: TEST_CONFIG.timeout });
+        await sleep(3000); // Give extra time for data to load
         
         // Run tests
         await testInventoryWorkflow(page);

@@ -53,24 +53,34 @@ async function waitForElement(page, selector, timeout = 5000) {
 }
 
 /**
+ * Sleep helper function
+ */
+async function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+/**
  * Test 1: Basic page load
  */
 async function testPageLoad(page) {
     try {
-        await page.goto(TEST_CONFIG.baseUrl, { waitUntil: 'networkidle0', timeout: TEST_CONFIG.timeout });
+        await page.goto(TEST_CONFIG.baseUrl, { waitUntil: 'domcontentloaded', timeout: TEST_CONFIG.timeout });
+        await sleep(2000); // Wait for content to render
         
         // Check if page title contains expected text
         const title = await page.title();
-        const titleOk = title.includes('JoeyKaye Handmades');
+        const titleOk = title.includes('JoeyKaye') || title.includes('Joey Kaye');
         
         // Check if main content is loaded
         const mainContent = await waitForElement(page, '.container');
         
-        logTest('Page loads successfully', titleOk && mainContent);
+        const passed = titleOk && mainContent;
+        const errorMsg = !passed ? `Title: "${title}", Title OK: ${titleOk}, Content loaded: ${mainContent}` : null;
+        logTest('Page loads successfully', passed, errorMsg);
         
-        return titleOk && mainContent;
+        return passed;
     } catch (error) {
-        logTest('Page loads successfully', false, error.message);
+        logTest('Page loads successfully', false, error?.message || String(error));
         return false;
     }
 }
@@ -91,7 +101,7 @@ async function testNavigation(page) {
         // Test clicking on first few navigation buttons
         for (let i = 0; i < Math.min(3, navButtons.length); i++) {
             await navButtons[i].click();
-            await page.waitFor(500); // Wait for tab switch
+            await sleep(500); // Wait for tab switch
         }
         
         logTest('Navigation works', true);
@@ -109,7 +119,7 @@ async function testAddItem(page) {
     try {
         // Click on the main inventory tab
         await page.click('[data-tab="inventory"]');
-        await page.waitFor(1000);
+        await sleep(1000);
         
         // Look for add button
         const addButton = await page.$('button[onclick*="openAddInventoryModal"]');
@@ -120,7 +130,7 @@ async function testAddItem(page) {
         
         // Click add button
         await addButton.click();
-        await page.waitFor(500);
+        await sleep(500);
         
         // Check if modal opens
         const modalVisible = await waitForElement(page, '#addInventoryModal');
@@ -132,7 +142,7 @@ async function testAddItem(page) {
             const closeButton = await page.$('#addInventoryModal .close');
             if (closeButton) {
                 await closeButton.click();
-                await page.waitFor(300);
+                await sleep(300);
             }
         }
         
@@ -149,7 +159,7 @@ async function testAddItem(page) {
 async function testDataLoading(page) {
     try {
         // Wait for data to load
-        await page.waitFor(2000);
+        await sleep(2000);
         
         // Check if any data containers exist and are populated
         const dataContainers = [
@@ -186,7 +196,7 @@ async function testResponsiveDesign(page) {
     try {
         // Test mobile viewport
         await page.setViewport({ width: 375, height: 667 }); // iPhone size
-        await page.waitFor(500);
+        await sleep(500);
         
         // Check if mobile-specific elements are visible
         const mobileCards = await page.$('.mobile-cards-container');
@@ -210,12 +220,12 @@ async function testAuthenticationDisabled(page) {
     try {
         // Try to access a protected action
         await page.click('[data-tab="inventory"]');
-        await page.waitFor(500);
+        await sleep(500);
         
         const addButton = await page.$('button[onclick*="openAddInventoryModal"]');
         if (addButton) {
             await addButton.click();
-            await page.waitFor(500);
+            await sleep(500);
             
             // Check if auth modal appears (it shouldn't)
             const authModal = await page.$('#authModal');

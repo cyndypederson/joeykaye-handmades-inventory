@@ -10,7 +10,7 @@ html {
 }
 
 @font-face {
-    font-family: 'Embroidery';
+    font-family: 'Handmade';
     src: url('./fonts/embroidery.woff2') format('woff2'),
          url('./fonts/embroidery.woff') format('woff'),
          url('./fonts/Embroidery.otf') format('opentype');

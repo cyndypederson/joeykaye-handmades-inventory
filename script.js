@@ -176,7 +176,7 @@ function goToPage(tab, page) {
             loadInventoryItemsTable();
             break;
         case 'customers':
-            loadCustomersTable();
+            loadCustomersCards();
             break;
         case 'sales':
             loadSalesTable();
@@ -199,7 +199,7 @@ function changePageSize(tab, newSize) {
             loadInventoryItemsTable();
             break;
         case 'customers':
-            loadCustomersTable();
+            loadCustomersCards();
             break;
         case 'sales':
             loadSalesTable();
@@ -1171,6 +1171,11 @@ class UXManager {
         const action = this.keyboardShortcuts.get(key);
         
         if (action) {
+            // Don't prevent default for paste (Ctrl+V) when in form fields
+            if (key === 'ctrl+v' && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) {
+                return; // Allow normal paste behavior in form fields
+            }
+            
             e.preventDefault();
             action();
         }
@@ -1651,7 +1656,7 @@ class DataManager {
             
             // Reload UI
             loadInventoryTable();
-            loadCustomersTable();
+            loadCustomersCards();
             loadSalesTable();
             loadGallery();
             loadIdeas();
@@ -1954,7 +1959,7 @@ class DataManager {
                 
                 // Reload UI
                 loadInventoryTable();
-                loadCustomersTable();
+                loadCustomersCards();
                 loadSalesTable();
                 loadGallery();
                 loadIdeas();
@@ -3110,7 +3115,7 @@ class DesktopManager {
         fetch('/version.json')
             .then(response => response.json())
             .then(data => {
-                const currentVersion = '1.0.0'; // Current app version
+                const currentVersion = '1.1.2'; // Current app version
                 if (data.version !== currentVersion) {
                     this.showNotification('Update Available', {
                         body: `Version ${data.version} is available. Current version: ${currentVersion}`,
@@ -3747,7 +3752,7 @@ class FormManager {
         
         customers.push(customer);
         saveData();
-        loadCustomersTable();
+        loadCustomersCards();
         
         showNotification('Customer added successfully!', 'success');
     }
@@ -5080,7 +5085,7 @@ function updateVersionDisplay() {
     const versionElement = document.getElementById('versionDisplay');
     if (versionElement) {
         // Use the same version as defined in the script
-        const currentVersion = '1.0.0';
+        const currentVersion = '1.1.2';
         versionElement.innerHTML = `<i class="fas fa-tag"></i> v${currentVersion}`;
     }
 }
@@ -6042,11 +6047,11 @@ function loadDataFromLocalStorage() {
     }
     
     console.log('🔄 Loading data from localStorage');
-    inventory = JSON.parse(localStorage.getItem('embroideryInventory')) || [];
-    customers = JSON.parse(localStorage.getItem('embroideryCustomers')) || [];
-    sales = JSON.parse(localStorage.getItem('embroiderySales')) || [];
-    gallery = JSON.parse(localStorage.getItem('embroideryGallery')) || [];
-    ideas = JSON.parse(localStorage.getItem('embroideryIdeas')) || [];
+    inventory = JSON.parse(localStorage.getItem('joeykayeInventory')) || [];
+    customers = JSON.parse(localStorage.getItem('joeykayeCustomers')) || [];
+    sales = JSON.parse(localStorage.getItem('joeykayeSales')) || [];
+    gallery = JSON.parse(localStorage.getItem('joeykayeGallery')) || [];
+    ideas = JSON.parse(localStorage.getItem('joeykayeIdeas')) || [];
     
     // Assign to window object for mobile cards
     window.inventory = inventory;
@@ -6405,11 +6410,11 @@ function createTestData() {
     ];
     
     // Save to localStorage
-    localStorage.setItem('embroideryInventory', JSON.stringify(testInventory));
-    localStorage.setItem('embroideryCustomers', JSON.stringify(testCustomers));
-    localStorage.setItem('embroiderySales', JSON.stringify(testSales));
-    localStorage.setItem('embroideryGallery', JSON.stringify(testGallery));
-    localStorage.setItem('embroideryIdeas', JSON.stringify(testIdeas));
+    localStorage.setItem('joeykayeInventory', JSON.stringify(testInventory));
+    localStorage.setItem('joeykayeCustomers', JSON.stringify(testCustomers));
+    localStorage.setItem('joeykayeSales', JSON.stringify(testSales));
+    localStorage.setItem('joeykayeGallery', JSON.stringify(testGallery));
+    localStorage.setItem('joeykayeIdeas', JSON.stringify(testIdeas));
     localStorage.setItem('lastDataSave', Date.now().toString());
     
     // Update in-memory variables
@@ -6442,7 +6447,7 @@ function debugLocalStorage() {
     console.log('📋 All keys:', keys);
     
     // Check our specific data keys
-    const dataKeys = ['embroideryInventory', 'embroideryCustomers', 'embroiderySales', 'embroideryGallery', 'embroideryIdeas'];
+    const dataKeys = ['joeykayeInventory', 'joeykayeCustomers', 'joeykayeSales', 'joeykayeGallery', 'joeykayeIdeas'];
     
     dataKeys.forEach(key => {
         const data = localStorage.getItem(key);
@@ -6487,11 +6492,11 @@ async function forceSyncData() {
     try {
         // First, load any data from localStorage into memory
         console.log('📥 Loading data from localStorage...');
-        inventory = JSON.parse(localStorage.getItem('embroideryInventory')) || [];
-        customers = JSON.parse(localStorage.getItem('embroideryCustomers')) || [];
-        sales = JSON.parse(localStorage.getItem('embroiderySales')) || [];
-        gallery = JSON.parse(localStorage.getItem('embroideryGallery')) || [];
-        ideas = JSON.parse(localStorage.getItem('embroideryIdeas')) || [];
+        inventory = JSON.parse(localStorage.getItem('joeykayeInventory')) || [];
+        customers = JSON.parse(localStorage.getItem('joeykayeCustomers')) || [];
+        sales = JSON.parse(localStorage.getItem('joeykayeSales')) || [];
+        gallery = JSON.parse(localStorage.getItem('joeykayeGallery')) || [];
+        ideas = JSON.parse(localStorage.getItem('joeykayeIdeas')) || [];
         
         console.log('📊 Data loaded from localStorage:');
         console.log(`  📦 Inventory: ${inventory.length} items`);
@@ -6570,11 +6575,11 @@ async function saveDataToAPI() {
 
 async function saveDataToLocalStorage() {
     try {
-        localStorage.setItem('embroideryInventory', JSON.stringify(inventory));
-        localStorage.setItem('embroideryCustomers', JSON.stringify(customers));
-        localStorage.setItem('embroiderySales', JSON.stringify(sales));
-        localStorage.setItem('embroideryGallery', JSON.stringify(gallery));
-        localStorage.setItem('embroideryIdeas', JSON.stringify(ideas));
+        localStorage.setItem('joeykayeInventory', JSON.stringify(inventory));
+        localStorage.setItem('joeykayeCustomers', JSON.stringify(customers));
+        localStorage.setItem('joeykayeSales', JSON.stringify(sales));
+        localStorage.setItem('joeykayeGallery', JSON.stringify(gallery));
+        localStorage.setItem('joeykayeIdeas', JSON.stringify(ideas));
         
         // Add timestamp for synchronization tracking
         localStorage.setItem('lastDataSave', Date.now().toString());
@@ -6589,11 +6594,11 @@ async function saveDataToLocalStorage() {
             
             try {
                 // Retry saving after cleanup
-                localStorage.setItem('embroideryInventory', JSON.stringify(inventory));
-                localStorage.setItem('embroideryCustomers', JSON.stringify(customers));
-                localStorage.setItem('embroiderySales', JSON.stringify(sales));
-                localStorage.setItem('embroideryGallery', JSON.stringify(gallery));
-                localStorage.setItem('embroideryIdeas', JSON.stringify(ideas));
+                localStorage.setItem('joeykayeInventory', JSON.stringify(inventory));
+                localStorage.setItem('joeykayeCustomers', JSON.stringify(customers));
+                localStorage.setItem('joeykayeSales', JSON.stringify(sales));
+                localStorage.setItem('joeykayeGallery', JSON.stringify(gallery));
+                localStorage.setItem('joeykayeIdeas', JSON.stringify(ideas));
                 localStorage.setItem('lastDataSave', Date.now().toString());
                 console.log('Data saved to localStorage after cleanup');
                 showNotification('Data saved after cleanup', 'success');
@@ -6637,7 +6642,7 @@ function cleanupLocalStorage() {
         });
         
         // Clear any large photo data that might be taking up space
-        const inventoryData = localStorage.getItem('embroideryInventory');
+        const inventoryData = localStorage.getItem('joeykayeInventory');
         if (inventoryData) {
             try {
                 const inventory = JSON.parse(inventoryData);
@@ -6652,7 +6657,7 @@ function cleanupLocalStorage() {
                 });
                 
                 if (hasLargePhotos) {
-                    localStorage.setItem('embroideryInventory', JSON.stringify(inventory));
+                    localStorage.setItem('joeykayeInventory', JSON.stringify(inventory));
                     console.log('Removed large photo data to free up space');
                 }
             } catch (e) {
@@ -8501,38 +8506,6 @@ function filterInventory() {
 }
 
 // Customer Management
-function loadCustomersTable() {
-    const tbody = document.getElementById('customersTableBody');
-    tbody.innerHTML = '';
-    
-    customers.forEach((customer, index) => {
-        const customerItems = inventory.filter(item => item.customer === customer.name);
-        const customerSales = sales.filter(sale => sale.customer === customer.name);
-        const totalSpent = customerSales.reduce((sum, sale) => sum + parseFloat(sale.price), 0);
-        
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td><strong>${customer.name}</strong></td>
-            <td>${customer.contact || ''}</td>
-            <td>${customer.location}</td>
-            <td>${customerItems.length}</td>
-            <td>$${totalSpent.toFixed(2)}</td>
-            <td>
-                <div class="action-buttons">
-                    <button class="btn btn-secondary" onclick="editCustomer(${index})">
-                        <i class="fas fa-edit"></i>
-                    </button>
-                    <button class="btn btn-danger" onclick="deleteCustomer(${index})">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </div>
-            </td>
-        `;
-        tbody.appendChild(row);
-    });
-    
-    // Desktop table loaded
-}
 
 async function openAddCustomerModal() {
     // Require authentication
@@ -8579,7 +8552,7 @@ function handleAddCustomer(e) {
     
     customers.push(newCustomer);
     saveData();
-    loadCustomersTable();
+    loadCustomersCards();
     updateLocationFilters();
     updateCustomerFilters();
     
@@ -8663,7 +8636,7 @@ function handleEditCustomer(e) {
     }
     
     saveData();
-    loadCustomersTable();
+    loadCustomersCards();
     loadInventoryTable();
     loadSalesTable();
     updateLocationFilters();
@@ -9939,7 +9912,7 @@ async function deleteCustomer(customerIdOrIndex) {
         let customerRemoved = false;
         
         // Handle both ID and index parameters
-        if (typeof customerIdOrIndex === 'string' || typeof customerIdOrIndex === 'number' && customerIdOrIndex > 1000) {
+        if (typeof customerIdOrIndex === 'string' || (typeof customerIdOrIndex === 'number' && customerIdOrIndex > 1000)) {
             // It's an ID (string or large number)
             const customer = customers.find(c => c.id === customerIdOrIndex);
             if (customer) {
@@ -9961,7 +9934,7 @@ async function deleteCustomer(customerIdOrIndex) {
             inventory = inventory.filter(item => item.customer !== customerName);
             sales = sales.filter(sale => sale.customer !== customerName);
             saveData();
-            loadCustomersTable();
+            loadCustomersCards(); // Fixed: use Cards instead of Table
             loadInventoryTable();
             loadSalesTable();
             showNotification('Customer and associated data deleted!', 'success');

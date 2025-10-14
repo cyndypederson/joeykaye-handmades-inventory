@@ -51,6 +51,13 @@ async function waitForElement(page, selector, timeout = 5000) {
 }
 
 /**
+ * Sleep helper function
+ */
+async function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+/**
  * Check if modal is visible
  */
 async function isModalVisible(page, modalId) {
@@ -75,7 +82,7 @@ async function isModalVisible(page, modalId) {
 async function testAddInventoryModal(page) {
     try {
         await page.click('[data-tab="inventory"]');
-        await page.waitFor(500);
+        await sleep(500);
         
         const addButton = await page.$('button[onclick*="openAddInventoryModal"]');
         if (!addButton) {
@@ -84,7 +91,7 @@ async function testAddInventoryModal(page) {
         }
         
         await addButton.click();
-        await page.waitFor(500);
+        await sleep(500);
         
         const modalVisible = await isModalVisible(page, 'addInventoryModal');
         logTest('Add Inventory Modal opens', modalVisible);
@@ -94,7 +101,7 @@ async function testAddInventoryModal(page) {
             const closeButton = await page.$('#addInventoryModal .close');
             if (closeButton) {
                 await closeButton.click();
-                await page.waitFor(300);
+                await sleep(300);
                 const modalClosed = !(await isModalVisible(page, 'addInventoryModal'));
                 logTest('Add Inventory Modal closes', modalClosed);
             }
@@ -112,8 +119,8 @@ async function testAddInventoryModal(page) {
  */
 async function testAddProjectModal(page) {
     try {
-        await page.click('[data-tab="wip"]');
-        await page.waitFor(500);
+        await page.click('[data-tab="projects"]');
+        await sleep(500);
         
         const addButton = await page.$('button[onclick*="openAddProjectModal"]');
         if (!addButton) {
@@ -122,7 +129,7 @@ async function testAddProjectModal(page) {
         }
         
         await addButton.click();
-        await page.waitFor(500);
+        await sleep(500);
         
         const modalVisible = await isModalVisible(page, 'addProjectModal');
         logTest('Add Project Modal opens', modalVisible);
@@ -132,7 +139,7 @@ async function testAddProjectModal(page) {
             const closeButton = await page.$('#addProjectModal .close');
             if (closeButton) {
                 await closeButton.click();
-                await page.waitFor(300);
+                await sleep(300);
                 const modalClosed = !(await isModalVisible(page, 'addProjectModal'));
                 logTest('Add Project Modal closes', modalClosed);
             }
@@ -151,7 +158,7 @@ async function testAddProjectModal(page) {
 async function testAddCustomerModal(page) {
     try {
         await page.click('[data-tab="customers"]');
-        await page.waitFor(500);
+        await sleep(500);
         
         const addButton = await page.$('button[onclick*="openAddCustomerModal"]');
         if (!addButton) {
@@ -160,7 +167,7 @@ async function testAddCustomerModal(page) {
         }
         
         await addButton.click();
-        await page.waitFor(500);
+        await sleep(500);
         
         const modalVisible = await isModalVisible(page, 'addCustomerModal');
         logTest('Add Customer Modal opens', modalVisible);
@@ -170,7 +177,7 @@ async function testAddCustomerModal(page) {
             const closeButton = await page.$('#addCustomerModal .close');
             if (closeButton) {
                 await closeButton.click();
-                await page.waitFor(300);
+                await sleep(300);
                 const modalClosed = !(await isModalVisible(page, 'addCustomerModal'));
                 logTest('Add Customer Modal closes', modalClosed);
             }
@@ -190,24 +197,29 @@ async function testModalIsolation(page) {
     try {
         // Open first modal
         await page.click('[data-tab="inventory"]');
-        await page.waitFor(500);
+        await sleep(500);
         
         const addInventoryButton = await page.$('button[onclick*="openAddInventoryModal"]');
         if (addInventoryButton) {
             await addInventoryButton.click();
-            await page.waitFor(500);
+            await sleep(500);
             
             const firstModalOpen = await isModalVisible(page, 'addInventoryModal');
             
             if (firstModalOpen) {
                 // Try to open second modal while first is open
-                await page.click('[data-tab="wip"]');
-                await page.waitFor(500);
+                // First switch tabs (this should close the first modal or prevent opening second)
+                await page.click('[data-tab="projects"]');
+                await sleep(1000); // Give time for tab switch
                 
                 const addProjectButton = await page.$('button[onclick*="openAddProjectModal"]');
                 if (addProjectButton) {
-                    await addProjectButton.click();
-                    await page.waitFor(500);
+                    try {
+                        await addProjectButton.click({ timeout: 5000 });
+                        await sleep(500);
+                    } catch (e) {
+                        // Button might not be clickable if modal is blocking
+                    }
                     
                     const secondModalOpen = await isModalVisible(page, 'addProjectModal');
                     const firstModalStillOpen = await isModalVisible(page, 'addInventoryModal');
@@ -221,7 +233,7 @@ async function testModalIsolation(page) {
                     const closeButtons = await page.$$('.modal .close');
                     for (const button of closeButtons) {
                         await button.click();
-                        await page.waitFor(200);
+                        await sleep(200);
                     }
                     
                     return onlyOneModalOpen;
@@ -242,8 +254,16 @@ async function testModalIsolation(page) {
  */
 async function testModalFormValidation(page) {
     try {
+        // Make sure all modals are closed first
+        await page.evaluate(() => {
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.style.display = 'none';
+            });
+        });
+        await sleep(500);
+        
         await page.click('[data-tab="inventory"]');
-        await page.waitFor(500);
+        await sleep(1000);
         
         const addButton = await page.$('button[onclick*="openAddInventoryModal"]');
         if (!addButton) {
@@ -252,7 +272,7 @@ async function testModalFormValidation(page) {
         }
         
         await addButton.click();
-        await page.waitFor(500);
+        await sleep(1000);
         
         const modalVisible = await isModalVisible(page, 'addInventoryModal');
         if (!modalVisible) {
@@ -264,7 +284,7 @@ async function testModalFormValidation(page) {
         const submitButton = await page.$('#addInventoryModal button[type="submit"]');
         if (submitButton) {
             await submitButton.click();
-            await page.waitFor(500);
+            await sleep(500);
             
             // Check if form validation prevents submission
             const modalStillOpen = await isModalVisible(page, 'addInventoryModal');
@@ -274,7 +294,7 @@ async function testModalFormValidation(page) {
             const closeButton = await page.$('#addInventoryModal .close');
             if (closeButton) {
                 await closeButton.click();
-                await page.waitFor(300);
+                await sleep(300);
             }
             
             return modalStillOpen;
@@ -310,8 +330,8 @@ async function runTests() {
         await page.setViewport(TEST_CONFIG.viewport);
         
         // Navigate to the app
-        await page.goto(TEST_CONFIG.baseUrl, { waitUntil: 'networkidle0' });
-        await page.waitFor(2000);
+        await page.goto(TEST_CONFIG.baseUrl, { waitUntil: 'domcontentloaded', timeout: TEST_CONFIG.timeout });
+        await sleep(2000);
         
         // Run tests
         await testAddInventoryModal(page);

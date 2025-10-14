@@ -453,7 +453,7 @@ connectToDatabase().then(() => {
     // Start server only if not in Vercel environment
     if (process.env.NODE_ENV !== 'production' || process.env.VERCEL !== '1') {
         app.listen(PORT, () => {
-            console.log(`\n🚀 Embroidery Inventory Manager Server Running!`);
+            console.log(`\n🚀 Joey Kaye Handmades Inventory Manager Server Running!`);
             console.log(`   Local:   http://localhost:${PORT}`);
             console.log(`   Network: http://${getLocalIP()}:${PORT}`);
             console.log(`\n📱 Access from any device on your network using the Network URL`);
