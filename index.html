@@ -313,12 +313,21 @@
                         </button>
                     </div>
                     <div class="version-display" id="versionDisplay">
-                        <i class="fas fa-tag"></i> v1.0.97
+                        <i class="fas fa-tag"></i> v1.1.0
                     </div>
                     <div class="connection-status" id="connectionStatusContainer">
                         <span id="connectionStatus" class="status-indicator">
                             <i class="fas fa-circle"></i> Connecting...
                         </span>
+                        <button class="btn btn-sm btn-primary" id="forceSyncBtn" onclick="forceSyncData()" style="margin-left: 0.5rem; padding: 0.25rem 0.75rem;" title="Force sync data from localStorage to server">
+                            <i class="fas fa-sync-alt"></i> Sync Now
+                        </button>
+                        <button class="btn btn-sm btn-secondary" onclick="debugLocalStorage()" style="margin-left: 0.5rem; padding: 0.25rem 0.75rem;" title="Debug localStorage contents">
+                            <i class="fas fa-bug"></i> Debug
+                        </button>
+                        <button class="btn btn-sm btn-warning" onclick="createTestData()" style="margin-left: 0.5rem; padding: 0.25rem 0.75rem;" title="Create test data to verify sync">
+                            <i class="fas fa-flask"></i> Test Data
+                        </button>
                     </div>
                 </div>
             </div>

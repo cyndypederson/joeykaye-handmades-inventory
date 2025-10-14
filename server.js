@@ -53,26 +53,42 @@ async function initializeCollections() {
             
             if (fs.existsSync(inventoryPath)) {
                 const inventoryData = JSON.parse(fs.readFileSync(inventoryPath, 'utf8'));
-                await db.collection('inventory').insertMany(inventoryData);
-                console.log('📦 Loaded inventory sample data');
+                if (inventoryData && inventoryData.length > 0) {
+                    await db.collection('inventory').insertMany(inventoryData);
+                    console.log('📦 Loaded inventory sample data');
+                } else {
+                    console.log('📦 Inventory data file is empty, skipping');
+                }
             }
             
             if (fs.existsSync(customersPath)) {
                 const customersData = JSON.parse(fs.readFileSync(customersPath, 'utf8'));
-                await db.collection('customers').insertMany(customersData);
-                console.log('👥 Loaded customers sample data');
+                if (customersData && customersData.length > 0) {
+                    await db.collection('customers').insertMany(customersData);
+                    console.log('👥 Loaded customers sample data');
+                } else {
+                    console.log('👥 Customers data file is empty, skipping');
+                }
             }
             
             if (fs.existsSync(salesPath)) {
                 const salesData = JSON.parse(fs.readFileSync(salesPath, 'utf8'));
-                await db.collection('sales').insertMany(salesData);
-                console.log('💰 Loaded sales sample data');
+                if (salesData && salesData.length > 0) {
+                    await db.collection('sales').insertMany(salesData);
+                    console.log('💰 Loaded sales sample data');
+                } else {
+                    console.log('💰 Sales data file is empty, skipping');
+                }
             }
             
             if (fs.existsSync(galleryPath)) {
                 const galleryData = JSON.parse(fs.readFileSync(galleryPath, 'utf8'));
-                await db.collection('gallery').insertMany(galleryData);
-                console.log('🖼️ Loaded gallery sample data');
+                if (galleryData && galleryData.length > 0) {
+                    await db.collection('gallery').insertMany(galleryData);
+                    console.log('🖼️ Loaded gallery sample data');
+                } else {
+                    console.log('🖼️ Gallery data file is empty, skipping');
+                }
             }
             
             // Initialize ideas collection (empty by default)

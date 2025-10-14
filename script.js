@@ -6312,6 +6312,222 @@ function cleanCopyText() {
     }
 }
 
+// Create Test Data Function
+function createTestData() {
+    console.log('🧪 Creating test data...');
+    
+    // Generate unique IDs
+    const generateId = () => Math.random().toString(36).substr(2, 9);
+    const now = new Date().toISOString();
+    
+    // Create test inventory items
+    const testInventory = [
+        {
+            id: generateId(),
+            name: "Test Embroidery Project",
+            type: "project",
+            customer: "Test Customer",
+            status: "in_progress",
+            description: "A test embroidery project to verify sync functionality",
+            materials: ["Thread", "Fabric"],
+            createdDate: now,
+            lastModified: now
+        },
+        {
+            id: generateId(),
+            name: "Test Inventory Item",
+            type: "inventory",
+            category: "Thread",
+            quantity: 5,
+            unit: "spools",
+            description: "Test inventory item for sync verification",
+            createdDate: now,
+            lastModified: now
+        }
+    ];
+    
+    // Create test customers
+    const testCustomers = [
+        {
+            id: generateId(),
+            name: "Test Customer",
+            email: "test@example.com",
+            phone: "555-0123",
+            address: "123 Test Street",
+            notes: "Test customer for sync verification",
+            createdDate: now,
+            lastModified: now
+        }
+    ];
+    
+    // Create test sales
+    const testSales = [
+        {
+            id: generateId(),
+            customerId: testCustomers[0].id,
+            customerName: testCustomers[0].name,
+            itemName: "Test Sale Item",
+            quantity: 1,
+            price: 25.00,
+            total: 25.00,
+            saleDate: now,
+            paymentMethod: "Cash",
+            notes: "Test sale for sync verification",
+            createdDate: now,
+            lastModified: now
+        }
+    ];
+    
+    // Create test gallery items
+    const testGallery = [
+        {
+            id: generateId(),
+            title: "Test Gallery Photo",
+            description: "A test photo to verify gallery sync",
+            imageData: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iIzAwN2JmZiIvPjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+VGVzdDwvdGV4dD48L3N2Zz4=",
+            createdDate: now,
+            lastModified: now
+        }
+    ];
+    
+    // Create test ideas
+    const testIdeas = [
+        {
+            id: generateId(),
+            title: "Test Idea",
+            description: "A test idea to verify ideas sync functionality",
+            category: "Design",
+            priority: "Medium",
+            status: "New",
+            createdDate: now,
+            lastModified: now
+        }
+    ];
+    
+    // Save to localStorage
+    localStorage.setItem('embroideryInventory', JSON.stringify(testInventory));
+    localStorage.setItem('embroideryCustomers', JSON.stringify(testCustomers));
+    localStorage.setItem('embroiderySales', JSON.stringify(testSales));
+    localStorage.setItem('embroideryGallery', JSON.stringify(testGallery));
+    localStorage.setItem('embroideryIdeas', JSON.stringify(testIdeas));
+    localStorage.setItem('lastDataSave', Date.now().toString());
+    
+    // Update in-memory variables
+    inventory = testInventory;
+    customers = testCustomers;
+    sales = testSales;
+    gallery = testGallery;
+    ideas = testIdeas;
+    
+    // Update UI
+    loadData();
+    
+    console.log('✅ Test data created:');
+    console.log(`  📦 Inventory: ${testInventory.length} items`);
+    console.log(`  👥 Customers: ${testCustomers.length} items`);
+    console.log(`  💰 Sales: ${testSales.length} items`);
+    console.log(`  🖼️ Gallery: ${testGallery.length} items`);
+    console.log(`  💡 Ideas: ${testIdeas.length} items`);
+    
+    showNotification('🧪 Test data created! Click "Sync Now" to test sync functionality.', 'success');
+}
+
+// Debug Function
+function debugLocalStorage() {
+    console.log('🔍 DEBUG: localStorage contents');
+    console.log('================================');
+    
+    const keys = Object.keys(localStorage);
+    console.log(`📋 Total localStorage keys: ${keys.length}`);
+    console.log('📋 All keys:', keys);
+    
+    // Check our specific data keys
+    const dataKeys = ['embroideryInventory', 'embroideryCustomers', 'embroiderySales', 'embroideryGallery', 'embroideryIdeas'];
+    
+    dataKeys.forEach(key => {
+        const data = localStorage.getItem(key);
+        if (data) {
+            try {
+                const parsed = JSON.parse(data);
+                console.log(`✅ ${key}: ${parsed.length} items`);
+                if (parsed.length > 0) {
+                    console.log(`   Sample:`, parsed[0]);
+                }
+            } catch (e) {
+                console.log(`❌ ${key}: Invalid JSON`);
+            }
+        } else {
+            console.log(`❌ ${key}: Not found`);
+        }
+    });
+    
+    // Show current in-memory data
+    console.log('📊 Current in-memory data:');
+    console.log(`  📦 Inventory: ${inventory.length} items`);
+    console.log(`  👥 Customers: ${customers.length} items`);
+    console.log(`  💰 Sales: ${sales.length} items`);
+    console.log(`  🖼️ Gallery: ${gallery.length} items`);
+    console.log(`  💡 Ideas: ${ideas.length} items`);
+    
+    // Show this info to user too
+    const totalItems = inventory.length + customers.length + sales.length + gallery.length + ideas.length;
+    showNotification(`Debug: ${totalItems} total items found (check console for details)`, 'info');
+}
+
+// Force Sync Function
+async function forceSyncData() {
+    console.log('🔄 Force sync initiated by user');
+    
+    // Disable the button to prevent multiple clicks
+    const syncBtn = document.getElementById('forceSyncBtn');
+    const originalText = syncBtn.innerHTML;
+    syncBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Syncing...';
+    syncBtn.disabled = true;
+    
+    try {
+        // First, load any data from localStorage into memory
+        console.log('📥 Loading data from localStorage...');
+        inventory = JSON.parse(localStorage.getItem('embroideryInventory')) || [];
+        customers = JSON.parse(localStorage.getItem('embroideryCustomers')) || [];
+        sales = JSON.parse(localStorage.getItem('embroiderySales')) || [];
+        gallery = JSON.parse(localStorage.getItem('embroideryGallery')) || [];
+        ideas = JSON.parse(localStorage.getItem('embroideryIdeas')) || [];
+        
+        console.log('📊 Data loaded from localStorage:');
+        console.log(`  📦 Inventory: ${inventory.length} items`);
+        console.log(`  👥 Customers: ${customers.length} items`);
+        console.log(`  💰 Sales: ${sales.length} items`);
+        console.log(`  🖼️ Gallery: ${gallery.length} items`);
+        console.log(`  💡 Ideas: ${ideas.length} items`);
+        
+        // Show sample data if any exists
+        if (inventory.length > 0) console.log('📦 Sample inventory item:', inventory[0]);
+        if (customers.length > 0) console.log('👥 Sample customer:', customers[0]);
+        if (sales.length > 0) console.log('💰 Sample sale:', sales[0]);
+        if (gallery.length > 0) console.log('🖼️ Sample gallery item:', gallery[0]);
+        if (ideas.length > 0) console.log('💡 Sample idea:', ideas[0]);
+        
+        // Show localStorage keys for debugging
+        console.log('🔍 All localStorage keys:', Object.keys(localStorage));
+        
+        // Now force save to server
+        await saveDataToAPI();
+        
+        showNotification('✅ Data synced to server successfully!', 'success');
+        
+        // Update UI to reflect the synced data
+        loadData();
+        
+    } catch (error) {
+        console.error('❌ Force sync failed:', error);
+        showNotification('❌ Sync failed: ' + error.message, 'error');
+    } finally {
+        // Re-enable the button
+        syncBtn.innerHTML = originalText;
+        syncBtn.disabled = false;
+    }
+}
+
 // API Functions
 async function saveDataToAPI() {
     console.log('🌐 saveDataToAPI() called');
