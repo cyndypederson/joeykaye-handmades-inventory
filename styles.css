@@ -77,6 +77,14 @@ header {
     z-index: 1;
 }
 
+.header-logo {
+    height: 50px;
+    width: auto;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    object-fit: contain;
+}
+
 .branding h1 {
     font-size: 1.8rem;
     margin: 0;
@@ -2119,6 +2127,18 @@ tr:nth-child(even) {
     border-bottom: 2px solid #E6E6FA;
 }
 
+.report-logo {
+    margin-bottom: 1rem;
+}
+
+.report-logo-img {
+    height: 60px;
+    width: auto;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    object-fit: contain;
+}
+
 .report-header h2 {
     color: #4A7C59;
     font-size: 2rem;
@@ -3148,6 +3168,10 @@ tr:nth-child(even) {
         height: 30px;
     }
     
+    .header-logo {
+        height: 35px;
+    }
+    
     .branding i {
         font-size: 1.2rem;
     }
@@ -4063,6 +4087,10 @@ body {
     .branding h1 {
         font-size: 0.9rem;
         line-height: 1.2;
+    }
+    
+    .header-logo {
+        height: 25px;
     }
     
     .nav-btn {

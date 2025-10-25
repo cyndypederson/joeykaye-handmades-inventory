@@ -28,4 +28,40 @@ The customer deletion console error (`Cannot set properties of null (setting 'in
 **Every test data creation should end with test data deletion.**
 
 ---
+
+## Version Management Protocol
+
+### When to Update Version:
+**ALWAYS update the version number when:**
+1. **Pushing to live production** - Any changes that go to the live Vercel site
+2. **Any Git push** - Even small fixes or documentation updates
+3. **Before deployment** - Update version first, then commit and push
+
+### Version Update Locations:
+1. **`package.json`** - Main version number
+2. **`index.html`** - Meta tag and title
+3. **`script.js`** - `updateVersionDisplay()` and `checkWebUpdates()` functions
+
+### Version Bump Strategy:
+- **Patch (1.1.x)** - Bug fixes, small improvements
+- **Minor (1.x.0)** - New features, significant changes
+- **Major (x.0.0)** - Breaking changes, major rewrites
+
+### Example Workflow:
+```bash
+# 1. Update version in all files
+# 2. Test locally
+# 3. Commit with version in message
+git commit -m "v1.1.3: Fix customer deletion error"
+# 4. Push to trigger deployment
+git push origin main
+```
+
+### Why This Matters:
+- **Cache busting** - Forces browsers to load new versions
+- **Deployment tracking** - Easy to see what's deployed
+- **Rollback reference** - Know which version to revert to
+- **User feedback** - Users can report specific version issues
+
+---
 *Note added: October 14, 2025*

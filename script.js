@@ -2438,6 +2438,9 @@ class AnalyticsManager {
         
         // Header
         html += '<div class="report-header">';
+        html += '<div class="report-logo">';
+        html += '<img src="joeykay.jpeg" alt="Joey Kaye Handmades Logo" class="report-logo-img">';
+        html += '</div>';
         html += '<h2>Comprehensive Business Report</h2>';
         html += '<p>Generated on: ' + new Date(report.generatedAt).toLocaleString() + '</p>';
         html += '</div>';
@@ -2697,8 +2700,8 @@ class DesktopManager {
     showNotification(title, options = {}) {
         if (this.notificationPermission === 'granted') {
             const notification = new Notification(title, {
-                icon: options.icon || '/logo.png',
-                badge: '/logo.png',
+                icon: options.icon || '/joeykay.jpeg',
+                badge: '/joeykay.jpeg',
                 body: options.body || '',
                 tag: options.tag || 'embroidery-app',
                 requireInteraction: options.requireInteraction || false,
@@ -2912,7 +2915,7 @@ class DesktopManager {
         
         this.showNotification('Auto-start enabled', {
             body: 'App will start automatically with your system',
-            icon: '/logo.png'
+            icon: '/joeykay.jpeg'
         });
     }
     
@@ -2925,15 +2928,15 @@ class DesktopManager {
         
         this.showNotification('Auto-start disabled', {
             body: 'App will not start automatically with your system',
-            icon: '/logo.png'
+            icon: '/joeykay.jpeg'
         });
     }
     
     setupSystemTray() {
         if (this.isElectron && this.electronAPI) {
             this.electronAPI.invoke('setup-tray', {
-                title: 'Embroidery Inventory',
-                icon: '/logo.png',
+                title: 'Joey Kaye Handmades Inventory',
+                icon: '/joeykay.jpeg',
                 menu: [
                     { label: 'Show App', click: () => this.showApp() },
                     { label: 'Hide App', click: () => this.hideApp() },
@@ -3115,7 +3118,7 @@ class DesktopManager {
         fetch('/version.json')
             .then(response => response.json())
             .then(data => {
-                const currentVersion = '1.1.2'; // Current app version
+                const currentVersion = '1.1.3'; // Current app version
                 if (data.version !== currentVersion) {
                     this.showNotification('Update Available', {
                         body: `Version ${data.version} is available. Current version: ${currentVersion}`,
@@ -4320,7 +4323,7 @@ function generateInvoiceHTML(invoice) {
             <div class="invoice-header-section">
                 <div class="business-info">
                     <div class="business-logo">
-                        <img src="logo.png" alt="${businessName} Logo" class="invoice-logo">
+                        <img src="joeykay.jpeg" alt="${businessName} Logo" class="invoice-logo">
                     </div>
                     <h1>${businessName}</h1>
                     <p>Email: ${businessEmail}</p>
@@ -4593,7 +4596,7 @@ function generateCleanInvoiceHTML(invoiceData) {
             <div class="invoice-header-section">
                 <div class="business-info">
                     <div class="business-logo">
-                        <img src="logo.png" alt="${invoiceData.businessName} Logo" class="invoice-logo">
+                        <img src="joeykay.jpeg" alt="${invoiceData.businessName} Logo" class="invoice-logo">
                     </div>
                     <h1>${invoiceData.businessName}</h1>
                     <p>Email: ${invoiceData.businessEmail}</p>
@@ -5085,7 +5088,7 @@ function updateVersionDisplay() {
     const versionElement = document.getElementById('versionDisplay');
     if (versionElement) {
         // Use the same version as defined in the script
-        const currentVersion = '1.1.2';
+        const currentVersion = '1.1.3';
         versionElement.innerHTML = `<i class="fas fa-tag"></i> v${currentVersion}`;
     }
 }
@@ -5288,7 +5291,7 @@ function checkLogo() {
         };
         
         // Try to load the logo
-        logo.src = 'logo.png';
+        logo.src = 'joeykay.jpeg';
     }
 }
 
@@ -10388,6 +10391,9 @@ function generateComprehensiveReport() {
     reportContent.innerHTML = `
         <div class="comprehensive-report">
             <div class="report-header">
+                <div class="report-logo">
+                    <img src="joeykay.jpeg" alt="Joey Kaye Handmades Logo" class="report-logo-img">
+                </div>
                 <h2>📊 Comprehensive Business Report</h2>
                 <p><strong>Generated:</strong> ${new Date().toLocaleString()}</p>
                 <p><strong>Period:</strong> ${filters.dateRange}</p>
