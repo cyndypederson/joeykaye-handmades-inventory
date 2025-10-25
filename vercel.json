@@ -23,6 +23,10 @@
       "use": "@vercel/static"
     },
     {
+      "src": "joeykay.jpeg",
+      "use": "@vercel/static"
+    },
+    {
       "src": "logo.png",
       "use": "@vercel/static"
     },
@@ -47,6 +51,10 @@
     {
       "src": "/data/(.*)",
       "dest": "/data/$1"
+    },
+    {
+      "src": "/joeykay.jpeg",
+      "dest": "/joeykay.jpeg"
     },
     {
       "src": "/logo.png",
